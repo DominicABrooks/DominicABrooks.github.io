@@ -7,12 +7,10 @@ main_nav: true
 
 ![alt text]({{ site.baseurl }}/assets/profile-placeholder.gif "Profile Picture"){:.profile}
 
-Centrarium is a custom theme for Jekyll, made by [Ben Centra][bencentra] for his own blog. He'd be humbled if you liked it enough to use it as well! Installation and configuration instructions can be found in the [GitHub repository](https://github.com/bencentra/centrarium).
+Hi, I’m [Dominic Brooks](https://github.com/DominicABrooks), a passionate **QA Engineer** with a focus on test automation and software quality. Currently, I’m working at **CivicServe** where I build and implement test automation frameworks with [Playwright](https://playwright.dev/), helping to streamline testing processes and improve software quality for a fast-paced SaaS startup.
 
-This page is a good place to write about yourself, your project, your product, or whatever it is your site is for. You can replace the image above, or you can get rid of it entirely. 
+I’ve always been driven by a love for technology and problem-solving, which led me to specialize in testing and automation. My experience spans across **test automation**, **performance testing**, and **security validation**, with a strong track record of reducing customer-reported defects and improving testing efficiency.
 
-You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/). And you can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+When I’m not automating tests or writing code, you can find me exploring new web technologies, contributing to open-source projects, or sharing my experiences and insights on QA and automation through my [blog](/posts).
 
-[centrarium]: https://github.com/bencentra/centrarium
-[bencentra]: http://bencentra.com
-[jekyll]: https://github.com/jekyll/jekyll
+Feel free to [contact me](/contact) if you’re looking to collaborate on web projects or need help refining your QA processes!
