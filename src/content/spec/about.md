@@ -1,0 +1,2 @@
+# About
+Software Developer in QA with a B.S. in Computer Science from Northern Illinois University. I'm focused on test automation and tools development and am passionate about building frameworks in Playwright to improve testing efficiency and software quality.
