@@ -1,6 +1,6 @@
 ---
-title: "Automating Repetitive eApplication Workflows: Building Maintainable E2E Suites"
-description: "Patterns and pragmatic advice for automating long, repetitive end-to-end eApplWhile automating long E2E flows isn't ideal, good design patterns help build frameworks that adapt to change without constant maintenance.cation flows with maintainable, resilient test framework"
+title: "My favorite flavor of POM"
+description: "Patterns for creating maintainable long repetitive end-to-end flows"
 published: 2025-09-29
 updated: 2025-09-29
 tags: [Playwright, Test Automation, TypeScript, Design Patterns, Best Practices]
