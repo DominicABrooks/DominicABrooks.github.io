@@ -24,7 +24,7 @@ Not saying these rules are perfect, but they absolutely have worked for me, and 
 
 One thing I've realized is key to maintainable page objects is focusing on business actions rather than UI implementations. Public methods should describe what the user wants to achieve, not how the UI makes it happen.
 
-So many times a function will be very specific to the implementation, and has to be changed in nearly every single spec file in order 
+So many times a function will be very specific to the implementation, and has to be changed in nearly every single spec file in order to be accurate to the actions being completed.
 
 #### Why avoid action verbs in public methods?
 
