@@ -31,17 +31,13 @@ export const siteConfig: SiteConfig = {
 	},
 	favicon: [
 		{
-			src: '/favicon/ms.webp',
-		}
+			src: "/favicon/ms.webp",
+		},
 	],
 };
 
 export const navBarConfig: NavBarConfig = {
-	links: [
-		LinkPreset.Home,
-		LinkPreset.Archive,
-		LinkPreset.About
-	],
+	links: [LinkPreset.Home, LinkPreset.Archive, LinkPreset.About],
 };
 
 export const profileConfig: ProfileConfig = {
@@ -50,14 +46,14 @@ export const profileConfig: ProfileConfig = {
 	bio: "QA Engineer",
 	links: [
 		{
-		name: "LinkedIn",
-		icon: "fa6-brands:linkedin",
-		url: "https://www.linkedin.com/in/domab/",
+			name: "LinkedIn",
+			icon: "fa6-brands:linkedin",
+			url: "https://www.linkedin.com/in/domab/",
 		},
 		{
-		name: "Email",
-		icon: "fa6-regular:envelope",
-		url: "mailto:domab2020@gmail.com",
+			name: "Email",
+			icon: "fa6-regular:envelope",
+			url: "mailto:domab2020@gmail.com",
 		},
 		{
 			name: "GitHub",
