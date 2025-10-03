@@ -2,8 +2,8 @@
 
 (async function oneko() {
   const nekoEl = document.createElement("div");
-  let nekoPosX = 32,
-    nekoPosY = 32,
+  let nekoPosX = 64,
+    nekoPosY = 128,
     mousePosX = 0,
     mousePosY = 0,
     frameCount = 0,
