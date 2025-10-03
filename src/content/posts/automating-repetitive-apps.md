@@ -5,7 +5,7 @@ published: 2025-09-29
 updated: 2025-09-29
 tags: [Playwright, Test Automation, TypeScript, Design Patterns, Best Practices]
 category: 'Test Automation'
-draft: true 
+draft: false 
 ---
 
 This is my first blog post, I'm currently working as a QA Engineering working towards an SDET title. I figured what better way to start a blog as an automation specialist than one of the most fundamental parts of automation engineering, POM, or page object model.
