@@ -1,0 +1,18 @@
+---
+import TravelMap from "../components/TravelMap.svelte";
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+
+const title = "Travel";
+const description = "Places I've visited";
+---
+
+<MainGridLayout title={title} description={description}>
+    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+        <div class="card-base z-10 px-9 py-6 relative w-full ">
+            <h1 class="text-2xl font-bold mb-4 text-[var(--primary)]">My Map</h1>
+            <TravelMap client:only="svelte" />
+        </div>
+    </div>
+</MainGridLayout>
