@@ -1,17 +1,14 @@
 ---
-title: "My favorite flavor of POM"
-description: "Patterns for creating maintainable long repetitive end-to-end flows"
+title: "Design Patterns for 100% Critical Coverage"
+description: "Page object model with intent-based actions"
 published: 2025-09-29
 updated: 2025-09-29
-tags: [Playwright, Test Automation, TypeScript, Design Patterns, Best Practices]
+tags: [Test Automation, Page Object Model, Playwright]
 category: 'Test Automation'
 draft: false 
 ---
 
-This is my first blog post, I'm currently working as a QA Engineering working towards an SDET title. I figured what better way to start a blog as an automation specialist than one of the most fundamental parts of automation engineering, POM, or page object model.
-
-It's not entirely necessary to follow this practice to a tee, especially in smaller or less repetitive suites, but historically I find this isn't the case.
-
+After a focused effort, we lifted critical capabilities coverage from 15% to 100%, dramatically reducing maintenance overhead.
 When you aren't the one creating the test cases, I find many companies ask QAE teams to automate long, repetitive end-to-end flows. For example hundreds of regression test cases filling out eApplications. These flows are often based off of manual test cases, not necessarily designed with automation in mind.
 
 I've automated regression suites for teams such as CivicServe eApp and worked on existing eApp frameworks such as Aspida eApp, as well as built frameworks for our third-party eApp vendors such as Firelight and AnnuityNet, and Affirm. 
