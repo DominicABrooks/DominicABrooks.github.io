@@ -3,7 +3,7 @@ title: "Rust just killed the internet"
 description: "A QA perspective on Cloudflare's outage and how testing could have prevented it"
 published: 2025-11-18
 updated: 2025-11-18
-tags: [Incident Analysis, QA Engineering, Testing Strategy, Error Handling, Boundary Testing]
+tags: [Incident Analysis, QA Engineering, Testing Strategy]
 category: 'Engineering'
 draft: false 
 ---
