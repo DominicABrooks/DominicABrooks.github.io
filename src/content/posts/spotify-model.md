@@ -1,5 +1,5 @@
 ---
-title: "The Spotify Model for QA: A Practical Perspective"
+title: "Thoughts on the Spotify Model for QA"
 description: "How the Spotify model transforms team structure and what QA engineers should know before adopting it"
 published: 2025-11-29
 updated: 2025-11-29
