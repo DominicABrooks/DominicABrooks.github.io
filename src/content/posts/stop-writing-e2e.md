@@ -77,9 +77,6 @@ Instead of being caught in a pull request by a fast unit or integration test, it
 
 All of this over something that could’ve been caught in seconds in a staging PR.
 
-That’s not just slow.  
-That’s organizational drag.
-
 ---
 
 ## Engineering Is a Pyramid, Not a Monolith
@@ -148,8 +145,6 @@ Start:
 
 Every bug caught lower in the pyramid is exponentially cheaper.
 
-Every bug caught at E2E is organizational friction.
-
 ---
 
 ## Final Thought
@@ -157,7 +152,5 @@ Every bug caught at E2E is organizational friction.
 End-to-end tests are powerful.
 
 But when they become your primary safety net, you're not building confidence.
-
-You're building fear.
 
 Engineering requires a pyramid
