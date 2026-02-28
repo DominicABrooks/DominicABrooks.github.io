@@ -11,9 +11,9 @@
 
   // Configuration for map categories
   const categoryConfig = {
-    home: { color: "#10b981", label: "Home / Grew Up" }, // Emerald
-    work: { color: "#f59e0b", label: "Work" }, // Amber
-    college: { color: "#ef4444", label: "College" }, // Red
+    home: { color: "#10b981", label: "Lived" }, // Emerald
+    work: { color: "#f59e0b", label: "Worked" }, // Amber
+    college: { color: "#ef4444", label: "Studied" }, // Red
     visited: { color: "#3b82f6", label: "Visited" } // Blue
   };
 
