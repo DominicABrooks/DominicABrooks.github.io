@@ -8,19 +8,7 @@ category: "Engineering"
 draft: false
 ---
 
-The page looks perfect.
-
-High-resolution.  
-The button is right there.  
-Pixel-perfect UI.
-
-You click it.
-
-Nothing happens.
-
-Not because it’s broken, but because the JavaScript hasn’t attached the event listeners yet. The app is *visible*, but it isn’t *awake*.
-
-And somehow, this tiny hydration gap has caused more flakiness than entire backend systems.
+Tiny hydration gap has caused more flakiness than entire backend systems.
 
 ---
 

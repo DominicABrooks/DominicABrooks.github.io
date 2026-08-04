@@ -7,7 +7,11 @@
   import { onMount } from 'svelte';
 
   let mapElement: HTMLElement;
+  let dogMapElement: HTMLElement;
   let map: any;
+  let dogMap: any;
+  let dogMarkerLayer: any;
+  let selectedDog = "Kyle";
 
   // Configuration for map categories
   const categoryConfig = {
@@ -41,7 +45,55 @@
 	{ name: "Natural Bridge", coords: [37.7768, -83.6833], category: "visited" },
 	// Savana Georgia 
 	{ name: "Savannah", coords: [32.0811, -81.0911], category: "visited" },
+    // Manhattan / New York City
+  { name: "New York City", coords: [40.7580, -73.9855], category: "visited" },
   ];
+
+  const dogLocations = {
+    Kyle: [
+      { name: "New York City", coords: [40.758, -73.9855], category: "visited" },
+      { name: "Raleigh, North Carolina", coords: [35.7796, -78.6382], category: "home" }
+    ],
+    Echo: [
+      { name: "Pisgah National Forest", coords: [35.2828, -82.7287], category: "visited" },
+      { name: "Raleigh, North Carolina", coords: [35.7796, -78.6382], category: "home" },
+      { name: "Middlesex, North Carolina", coords: [35.7902, -78.2042], category: "home" }
+    ],
+    River: [
+      { name: "Raleigh, North Carolina", coords: [35.7796, -78.6382], category: "home" },
+      { name: "Middlesex, North Carolina", coords: [35.7902, -78.2042], category: "home" }
+    ]
+  };
+
+  function renderDogLocations(Leaflet: any) {
+    if (!dogMap) return;
+
+    if (dogMarkerLayer) dogMarkerLayer.clearLayers();
+    dogMarkerLayer = Leaflet.layerGroup().addTo(dogMap);
+
+    const dogPoints = dogLocations[selectedDog as keyof typeof dogLocations];
+    dogPoints.forEach((loc) => {
+      const category = categoryConfig[loc.category as keyof typeof categoryConfig];
+      Leaflet.circleMarker(loc.coords as [number, number], {
+        radius: 8,
+        fillColor: category.color,
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+      })
+        .bindPopup(`<b>${loc.name}</b><br>${category.label}`)
+        .addTo(dogMarkerLayer);
+    });
+
+    dogMap.fitBounds(dogMarkerLayer.getBounds(), { padding: [40, 40], maxZoom: 6 });
+  }
+
+  function selectDog(dog: keyof typeof dogLocations) {
+    selectedDog = dog;
+    // @ts-ignore
+    if (typeof L !== "undefined") renderDogLocations(L);
+  }
 
   onMount(() => {
     let mapInstance: any;
@@ -110,6 +162,17 @@
           legend.addTo(mapInstance);
           
           map = mapInstance;
+
+          if (dogMapElement) {
+            dogMap = Leaflet.map(dogMapElement).setView([35.7796, -78.6382], 6);
+            Leaflet.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+              attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+              subdomains: 'abcd',
+              maxZoom: 20
+            }).addTo(dogMap);
+            renderDogLocations(Leaflet);
+
+          }
         }
       } catch (e) {
         console.error("Failed to load Leaflet map", e);
@@ -122,6 +185,7 @@
       if (mapInstance) {
         mapInstance.remove();
       }
+      if (dogMap) dogMap.remove();
     };
   });
 </script>
@@ -129,6 +193,29 @@
 <div class="map-container">
   <div bind:this={mapElement} class="map"></div>
 </div>
+
+<section class="dogs-section" aria-labelledby="dogs-heading">
+  <h2 id="dogs-heading">Dogs</h2>
+  <div class="dog-tabs" role="tablist" aria-label="Dog maps">
+    {#each Object.keys(dogLocations) as dog}
+      <button
+        type="button"
+        role="tab"
+        aria-selected={selectedDog === dog}
+        class:active={selectedDog === dog}
+        on:click={() => selectDog(dog as keyof typeof dogLocations)}
+      >{dog}</button>
+    {/each}
+  </div>
+  <div class="map-container dog-map-container">
+    <div bind:this={dogMapElement} class="map"></div>
+    <div class="dog-map-key" aria-label="Map key">
+      <strong>Key</strong>
+      <span><i class="lived"></i>Lived</span>
+      <span><i class="visited"></i>Visited</span>
+    </div>
+  </div>
+</section>
 
 <style>
   .map-container {
@@ -144,4 +231,75 @@
     height: 100%;
     z-index: 1;
   }
+
+  .dogs-section {
+    margin-top: 2.5rem;
+  }
+
+  h2 {
+    color: var(--primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+  }
+
+  .dog-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .dog-tabs button {
+    border: 1px solid var(--primary);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--primary);
+    cursor: pointer;
+    font: inherit;
+    padding: 0.45rem 1rem;
+  }
+
+  .dog-tabs button.active,
+  .dog-tabs button:hover {
+    background: var(--primary);
+    color: var(--card-bg, white);
+  }
+
+  .dog-map-container {
+    height: 450px;
+    position: relative;
+  }
+
+  .dog-map-key {
+    align-items: flex-start;
+    background: white;
+    border-radius: 5px;
+    bottom: 1rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.65rem;
+    position: absolute;
+    right: 1rem;
+    z-index: 2;
+  }
+
+  .dog-map-key span {
+    align-items: center;
+    display: flex;
+    gap: 0.45rem;
+  }
+
+  .dog-map-key i {
+    border: 1px solid #000;
+    border-radius: 50%;
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
+  }
+
+  .dog-map-key .lived { background: #10b981; }
+  .dog-map-key .visited { background: #3b82f6; }
 </style>

@@ -1,24 +1,12 @@
 ---
-title: "Stop Writing So Many E2E Tests (The Hard Way)"
-description: "Lets be honest, you have way too many"
+title: "E2E Tests Are Too Expensive"
+description: "Sometimes the better solution is the less comfortable one"
 published: 2026-02-16
 updated: 2026-02-16
 tags: [Testing Strategy, Playwright, Engineering Leadership]
 category: "Engineering"
 draft: false
 ---
-
-You've got 2,000 end-to-end tests.  
-You've got an expensive, parallelized CI fleet.  
-And yet… you're still afraid to push to production.
-
-Why?
-
-Because your testing strategy is missing the point.
-
----
-
-## The Illusion of Confidence
 
 E2E tests *feel* like the best approach.
 
@@ -33,21 +21,18 @@ It *feels* definitive.
 
 QA teams love them. Management loves them. The dashboard looks impressive.
 
-But then the suite keeps growing.
+The suite keeps growing.
 
 You add more parallelization.  
 You add more containers.  
 You hire more QA engineers to maintain the suite.  
 
-And defect rates are still high.
+Non-prod defect rates are high.
 
 Stories reach QA completely broken.  
 Hotfixes require an overnight 3-hour run across hundreds of containers.  
-Everyone holds their breath before pressing deploy.
 
-Something feels wrong.
-
-Because something **is** wrong.
+Something **is** wrong.
 
 ---
 
@@ -55,14 +40,14 @@ Because something **is** wrong.
 
 E2E tests are being used to validate *business logic* that should never have made it that far.
 
-Yes — technically you *can* test everything through QA-level end-to-end tests.
+You *can* test through QA-level end-to-end tests.
 
 It’s just wildly expensive.
 
 Think about this scenario:
 
 An endpoint starts returning `"100"` instead of `100`.  
-A type change. Nothing catastrophic.
+A type change
 
 Instead of being caught in a pull request by a fast unit or integration test, it:
 
@@ -144,13 +129,3 @@ Start:
 - Holding PRs accountable for logic coverage before QA ever sees it.
 
 Every bug caught lower in the pyramid is exponentially cheaper.
-
----
-
-## Final Thought
-
-End-to-end tests are powerful.
-
-But when they become your primary safety net, you're not building confidence.
-
-Engineering requires a pyramid
