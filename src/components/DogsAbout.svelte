@@ -1,43 +1,44 @@
 <script lang="ts">
-  const dogs = {
-    Echo: {
-      birthday: new Date(2022, 10, 6),
-      image: "/images/dogs/Echo.png",
-      details: "100% German Shepherd"
-    },
-    River: {
-      birthday: new Date(2021, 4, 9),
-      image: "/images/dogs/River.png",
-      details: "33.37% Golden Retriever, 18.1% Doberman Pinscher, 16.2% Rottweiler, 16% Chow Chow, 10.4% Supermutt, and 5.6% Cocker Spaniel"
-    },
-    Kyle: {
-      birthday: new Date(2025, 10, 15),
-      image: "/images/dogs/Kyle.png",
-      details: "Embark results are still pending."
-    }
-  };
+const dogs = {
+	Echo: {
+		birthday: new Date(2022, 10, 6),
+		image: "/images/dogs/Echo.png",
+		details: "100% German Shepherd",
+	},
+	River: {
+		birthday: new Date(2021, 4, 9),
+		image: "/images/dogs/River.png",
+		details:
+			"33.37% Golden Retriever, 18.1% Doberman Pinscher, 16.2% Rottweiler, 16% Chow Chow, 10.4% Supermutt, and 5.6% Cocker Spaniel",
+	},
+	Kyle: {
+		birthday: new Date(2025, 10, 15),
+		image: "/images/dogs/Kyle.png",
+		details: "Embark results are still pending.",
+	},
+};
 
-  let selectedDog: keyof typeof dogs = "Kyle";
+let selectedDog: keyof typeof dogs = "Kyle";
 
-  function getAge(birthday: Date) {
-    const today = new Date();
-    let years = today.getFullYear() - birthday.getFullYear();
-    let months = today.getMonth() - birthday.getMonth();
+function getAge(birthday: Date) {
+	const today = new Date();
+	let years = today.getFullYear() - birthday.getFullYear();
+	let months = today.getMonth() - birthday.getMonth();
 
-    if (today.getDate() < birthday.getDate()) months -= 1;
-    if (months < 0) {
-      years -= 1;
-      months += 12;
-    }
+	if (today.getDate() < birthday.getDate()) months -= 1;
+	if (months < 0) {
+		years -= 1;
+		months += 12;
+	}
 
-    return `${years} year${years === 1 ? "" : "s"}, ${months} month${months === 1 ? "" : "s"}`;
-  }
+	return `${years} year${years === 1 ? "" : "s"}, ${months} month${months === 1 ? "" : "s"}`;
+}
 
-  const birthdayFormatter = new Intl.DateTimeFormat("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric"
-  });
+const birthdayFormatter = new Intl.DateTimeFormat("en-US", {
+	month: "long",
+	day: "numeric",
+	year: "numeric",
+});
 </script>
 
 <section class="dogs-section" aria-labelledby="dogs-heading">
