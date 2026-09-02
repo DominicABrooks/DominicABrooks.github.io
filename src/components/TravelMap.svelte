@@ -13,6 +13,9 @@
   let dogMarkerLayer: any;
   let selectedDog = "Kyle";
 
+  const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+  const tileAttribution = "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors";
+
   // Configuration for map categories
   const categoryConfig = {
     home: { color: "#10b981", label: "Lived" }, // Emerald
@@ -112,8 +115,8 @@
         if (mapElement) {
           mapInstance = Leaflet.map(mapElement).setView([39.8283, -98.5795], 4); // Center of US
 
-          Leaflet.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          Leaflet.tileLayer(tileUrl, {
+            attribution: tileAttribution,
             subdomains: 'abcd',
             maxZoom: 20
           }).addTo(mapInstance);
@@ -165,8 +168,8 @@
 
           if (dogMapElement) {
             dogMap = Leaflet.map(dogMapElement).setView([35.7796, -78.6382], 6);
-            Leaflet.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-              attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            Leaflet.tileLayer(tileUrl, {
+              attribution: tileAttribution,
               subdomains: 'abcd',
               maxZoom: 20
             }).addTo(dogMap);
