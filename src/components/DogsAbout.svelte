@@ -3,68 +3,71 @@ import BreedBars from "./BreedBars.svelte";
 
 type Breed = { name: string; pct: number; color: string };
 type Dog = {
-  name: string;
-  birthday: Date;
-  image: string;
-  breeds: Breed[];
-  heroPos: string;
+	name: string;
+	birthday: Date;
+	image: string;
+	breeds: Breed[];
+	heroPos: string;
 };
 
 const dogs: Dog[] = [
-  {
-    name: "Echo",
-    birthday: new Date(2022, 10, 6),
-    image: "/images/dogs/Echo.png",
-    breeds: [{ name: "German Shepherd", pct: 100, color: "#6B8E6B" }],
-    heroPos: "50% 38%",
-  },
-  {
-    name: "River",
-    birthday: new Date(2021, 4, 9),
-    image: "/images/dogs/River.png",
-    breeds: [
-      { name: "Golden Retriever", pct: 33.37, color: "#E9B949" },
-      { name: "Doberman Pinscher", pct: 18.1, color: "#5B89D6" },
-      { name: "Rottweiler", pct: 16.2, color: "#D85B63" },
-      { name: "Chow Chow", pct: 16, color: "#9D79C7" },
-      { name: "Supermutt", pct: 10.4, color: "#55AD8B" },
-      { name: "Cocker Spaniel", pct: 5.93, color: "#EC9A65" },
-    ],
-    heroPos: "50% 42%",
-  },
-  {
-    name: "Kyle",
-    birthday: new Date(2025, 10, 15),
-    image: "/images/dogs/Kyle.png",
-    breeds: [
-      { name: "Pomeranian", pct: 28, color: "#F1B81A" },
-      { name: "Chihuahua", pct: 22, color: "#3AA6E0" },
-      { name: "Poodle (Small)", pct: 20.3, color: "#E85454" },
-      { name: "Pekingese", pct: 18.6, color: "#9D6EE8" },
-      { name: "Lhasa Apso", pct: 11.1, color: "#EABF86" },
-    ],
-    heroPos: "50% 20%",
-  },
+	{
+		name: "Echo",
+		birthday: new Date(2022, 10, 6),
+		image: "/images/dogs/Echo.png",
+		breeds: [{ name: "German Shepherd", pct: 100, color: "#6B8E6B" }],
+		heroPos: "50% 38%",
+	},
+	{
+		name: "River",
+		birthday: new Date(2021, 4, 9),
+		image: "/images/dogs/River.png",
+		breeds: [
+			{ name: "Golden Retriever", pct: 33.37, color: "#E9B949" },
+			{ name: "Doberman Pinscher", pct: 18.1, color: "#5B89D6" },
+			{ name: "Rottweiler", pct: 16.2, color: "#D85B63" },
+			{ name: "Chow Chow", pct: 16, color: "#9D79C7" },
+			{ name: "Supermutt", pct: 10.4, color: "#55AD8B" },
+			{ name: "Cocker Spaniel", pct: 5.93, color: "#EC9A65" },
+		],
+		heroPos: "50% 42%",
+	},
+	{
+		name: "Kyle",
+		birthday: new Date(2025, 10, 15),
+		image: "/images/dogs/Kyle.png",
+		breeds: [
+			{ name: "Pomeranian", pct: 28, color: "#F1B81A" },
+			{ name: "Chihuahua", pct: 22, color: "#3AA6E0" },
+			{ name: "Poodle (Small)", pct: 20.3, color: "#E85454" },
+			{ name: "Pekingese", pct: 18.6, color: "#9D6EE8" },
+			{ name: "Lhasa Apso", pct: 11.1, color: "#EABF86" },
+		],
+		heroPos: "50% 20%",
+	},
 ];
 
-let selected: string = "Kyle";
+let selected = "Kyle";
 $: active = dogs.find((d) => d.name === selected) ?? dogs[2];
 
 function getAge(birthday: Date): string {
-  const today = new Date();
-  let years = today.getFullYear() - birthday.getFullYear();
-  let months = today.getMonth() - birthday.getMonth();
-  if (today.getDate() < birthday.getDate()) months -= 1;
-  if (months < 0) { years -= 1; months += 12; }
-  if (years <= 0) return `${months} month${months === 1 ? "" : "s"} old`;
-  if (months === 0) return `${years} year${years === 1 ? "" : "s"} old`;
-  return `${years} yr ${months} mo old`;
+	const today = new Date();
+	let years = today.getFullYear() - birthday.getFullYear();
+	let months = today.getMonth() - birthday.getMonth();
+	if (today.getDate() < birthday.getDate()) months -= 1;
+	if (months < 0) {
+		years -= 1;
+		months += 12;
+	}
+	if (years <= 0) return `${months} month${months === 1 ? "" : "s"} old`;
+	if (months === 0) return `${years} year${years === 1 ? "" : "s"} old`;
+	return `${years} yr ${months} mo old`;
 }
 
 const birthdayFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "long",
-  day: "numeric",
-  year: "numeric",
+	month: "long",
+	day: "numeric",
+	year: "numeric",
 });
 </script>
 

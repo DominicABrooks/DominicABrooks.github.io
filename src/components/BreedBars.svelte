@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let breeds: { name: string; pct: number; color: string }[] = [];
+export let breeds: { name: string; pct: number; color: string }[] = [];
 </script>
 
 <div class="breed-bars" aria-label="Breed composition">

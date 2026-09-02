@@ -197,29 +197,6 @@
   <div bind:this={mapElement} class="map"></div>
 </div>
 
-<section class="dogs-section" aria-labelledby="dogs-heading">
-  <h2 id="dogs-heading">Dogs</h2>
-  <div class="dog-tabs" role="tablist" aria-label="Dog maps">
-    {#each Object.keys(dogLocations) as dog}
-      <button
-        type="button"
-        role="tab"
-        aria-selected={selectedDog === dog}
-        class:active={selectedDog === dog}
-        on:click={() => selectDog(dog as keyof typeof dogLocations)}
-      >{dog}</button>
-    {/each}
-  </div>
-  <div class="map-container dog-map-container">
-    <div bind:this={dogMapElement} class="map"></div>
-    <div class="dog-map-key" aria-label="Map key">
-      <strong>Key</strong>
-      <span><i class="lived"></i>Lived</span>
-      <span><i class="visited"></i>Visited</span>
-    </div>
-  </div>
-</section>
-
 <style>
   .map-container {
     width: 100%;
