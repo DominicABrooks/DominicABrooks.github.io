@@ -68,21 +68,21 @@ All of this over something that could’ve been caught in seconds in a staging P
 
 Your test strategy should look like this:
 
-### Base Layer — Unit Tests
+### Base Layer Unit Tests
 - Validate business logic
 - Catch edge cases
 - Run in milliseconds
 - Execute on every commit
 
-### Middle Layer — Integration & Contract Tests
+### Middle Layer Integration & Contract Tests
 - Validate service boundaries
 - Catch schema/type regressions
 - Ensure systems agree on expectations
 
-### Top Layer — End-to-End Tests
+### Top Layer End-to-End Tests
 - Validate critical user journeys
 - Ensure no catastrophic production failures
-- Increase confidence — not prove correctness
+- Increase confidence not prove correctness
 
 E2E tests are supposed to **increase confidence**, not serve as your primary regression mechanism.
 

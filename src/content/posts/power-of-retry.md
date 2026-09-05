@@ -1,5 +1,5 @@
 ---
-title: "Why expect.toPass() Is the civilized way to handle hydration issues"
+title: "Handling hydration issues in a way that isn't going to drive you insane"
 description: "Hydration issues probably aren't getting fixed, so lets engineer around them"
 published: 2026-02-16
 updated: 2026-02-16

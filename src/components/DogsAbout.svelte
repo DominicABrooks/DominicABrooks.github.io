@@ -64,6 +64,11 @@ function getAge(birthday: Date): string {
 	return `${years} yr ${months} mo old`;
 }
 
+function getBreedSummary(dog: Dog): string {
+	if (dog.breeds.length === 1) return "Purebred";
+	return `${dog.breeds.length} breeds`;
+}
+
 const birthdayFormatter = new Intl.DateTimeFormat("en-US", {
 	month: "long",
 	day: "numeric",
@@ -73,8 +78,8 @@ const birthdayFormatter = new Intl.DateTimeFormat("en-US", {
 
 <section class="dogs-section" aria-labelledby="dogs-heading">
   <div class="dogs-head">
-    <h2 id="dogs-heading">Dogs</h2>
-    <p class="dogs-sub">Meet our dogs</p>
+    <h2 id="dogs-heading"><span class="heading-bar" aria-hidden="true"></span> Dogs</h2>
+    <p class="dogs-sub">Meet the pack</p>
   </div>
 
   <div class="dog-tabs" role="tablist" aria-label="Dog profiles">
@@ -86,124 +91,231 @@ const birthdayFormatter = new Intl.DateTimeFormat("en-US", {
         class:active={selected === dog.name}
         on:click={() => (selected = dog.name)}
       >
-        <img src={dog.image} alt="" aria-hidden="true" loading="lazy" style:object-position={dog.heroPos} />
+        <span class="tab-thumb">
+          <img src={dog.image} alt="" aria-hidden="true" loading="lazy" style:object-position={dog.heroPos} />
+        </span>
         <span class="tab-meta">
           <span class="tab-name">{dog.name}</span>
-          <span class="tab-detail">{dog.breeds.length === 1 ? "Purebred" : `${dog.breeds.length} breeds`} · {getAge(dog.birthday)}</span>
+          <span class="tab-detail">{getBreedSummary(dog)} &middot; {getAge(dog.birthday)}</span>
         </span>
+        {#if selected === dog.name}
+          <span class="tab-check" aria-hidden="true">&#10003;</span>
+        {/if}
       </button>
     {/each}
   </div>
 
-  <div class="dog-card" role="tabpanel" aria-label="{active.name} profile">
-    <div class="hero">
-      <img src={active.image} alt={active.name} loading="eager" style:object-position={active.heroPos} />
-      <div class="hero-gradient" aria-hidden="true"></div>
-      <div class="hero-text">
-        <h3>{active.name}</h3>
-        <div class="hero-badges">
-          <span class="badge age">{getAge(active.birthday)}</span>
-          <span class="badge born">Born {birthdayFormatter.format(active.birthday)}</span>
+  <div class="dog-showcase" role="tabpanel" aria-label="{active.name} profile">
+    <div class="showcase-grid">
+      <div class="photo-wrap">
+        {#key active.name}
+          <img
+            src={active.image}
+            alt="{active.name} - {getBreedSummary(active)}"
+            loading="eager"
+            style:object-position={active.heroPos}
+          />
+        {/key}
+        <div class="photo-veil" aria-hidden="true"></div>
+        <div class="photo-caption">
+          <h3>{active.name}</h3>
+          <p>{getAge(active.birthday)} &middot; Born {birthdayFormatter.format(active.birthday)}</p>
         </div>
       </div>
-    </div>
 
-    <div class="card-body">
-      <div class="embark-kicker">
-        <span class="kicker-dot" aria-hidden="true"></span>
-        Embark · Breed Mix
+      <div class="info-wrap">
+        <div class="info-head">
+          <h3 class="info-name">{active.name}</h3>
+          <div class="info-badges">
+            <span class="ibadge age">{getAge(active.birthday)}</span>
+            <span class="ibadge born">Born {birthdayFormatter.format(active.birthday)}</span>
+          </div>
+          <p class="info-summary">
+            {#if active.breeds.length === 1}
+              Purebred German Shepherd Embark DNA confirmed.
+            {:else}
+              {active.breeds.length}-breed mix &middot; Embark DNA as tested.
+            {/if}
+          </p>
+        </div>
+
+        <div class="info-breeds">
+          <BreedBars breeds={active.breeds} />
+          <p class="embark-footnote">
+            {#if active.breeds.length === 1}
+              Purebred result Embark DNA.
+            {:else}
+              {active.name}'s Embark results - {active.breeds.length} breeds as tested.
+            {/if}
+          </p>
+        </div>
       </div>
-      <BreedBars breeds={active.breeds} />
-      <p class="embark-footnote">
-        {#if active.breeds.length === 1}
-          Purebred result — Embark DNA.
-        {:else}
-          {active.name}'s Embark results — {active.breeds.length} breeds as tested.
-        {/if}
-      </p>
     </div>
   </div>
 </section>
 
 <style>
-  .dogs-section { margin-top: 2.2rem; }
-  .dogs-head { margin-bottom: 0.9rem; }
+  .dogs-section {
+    margin-top: 2.4rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--line-divider, rgba(0,0,0,0.08));
+  }
+  .dogs-head { margin-bottom: 1rem; }
   h2 {
-    color: #111827;
-    font-size: 1.5rem; font-weight: 800; margin: 0; letter-spacing: -0.02em;
+    display: flex; align-items: center; gap: 0.75rem;
+    font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em;
+    color: #111827; margin: 0;
   }
   :global(html.dark) h2 { color: #f3f4f6; }
-  .dogs-sub { margin: 0.15rem 0 0; font-size: 0.9rem; color: #6b7280; }
-  :global(html.dark) .dogs-sub { color: rgba(255,255,255,0.62); }
+  .heading-bar {
+    width: 4px; height: 1.15rem; border-radius: 999px;
+    background: var(--primary); flex-shrink: 0;
+  }
+  .dogs-sub {
+    margin: 0.35rem 0 0 1.05rem;
+    font-size: 0.88rem; line-height: 1.4;
+    color: #6b7280;
+  }
+  :global(html.dark) .dogs-sub { color: rgba(255,255,255,0.58); }
 
   .dog-tabs {
-    display: grid; grid-template-columns: repeat(3, minmax(0,1fr));
-    gap: 0.6rem; margin-bottom: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 0.6rem;
+    margin-bottom: 1rem;
   }
-  @media (max-width: 640px) { .dog-tabs { grid-template-columns: 1fr; } }
+  @media (max-width: 720px) { .dog-tabs { grid-template-columns: 1fr; } }
   .dog-tabs button {
+    position: relative;
     display: flex; align-items: center; gap: 0.7rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: 999px;
     border: 1px solid var(--line-divider, rgba(0,0,0,0.08));
-    border-radius: 1rem; background: var(--card-bg, white);
-    padding: 0.55rem 0.7rem; cursor: pointer; text-align: left;
-    transition: border-color 0.18s, box-shadow 0.18s, background 0.18s, transform 0.12s;
-    box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+    background: var(--card-bg, #fff);
+    cursor: pointer; text-align: left;
+    transition: border-color 0.18s, background 0.18s, box-shadow 0.18s, transform 0.15s;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02);
   }
-  :global(html.dark) .dog-tabs button { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.08); }
-  .dog-tabs button:hover { border-color: var(--primary); transform: translateY(-1px); }
+  :global(html.dark) .dog-tabs button {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.07);
+  }
+  .dog-tabs button:hover {
+    border-color: color-mix(in oklch, var(--primary) 35%, transparent);
+    transform: translateY(-1px);
+  }
   .dog-tabs button.active {
+    background: var(--btn-regular-bg, #f4f4f5);
     border-color: var(--primary);
-    background: var(--btn-regular-bg, #f5f5f5);
-    box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
   }
-  :global(html.dark) .dog-tabs button.active { background: rgba(255,255,255,0.10); }
-  .dog-tabs button img {
-    width: 2.6rem; height: 2.6rem; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid white; box-shadow: 0 1px 6px rgba(0,0,0,0.12);
+  :global(html.dark) .dog-tabs button.active {
+    background: color-mix(in oklch, var(--primary) 14%, oklch(0.23 0.015 var(--hue)));
   }
-  .tab-meta { display: flex; flex-direction: column; min-width: 0; }
-  .tab-name { font-weight: 700; font-size: 0.98rem; line-height: 1.1; color: #111827; }
+  .tab-thumb {
+    width: 2.5rem; height: 2.5rem; border-radius: 50%; overflow: hidden;
+    flex-shrink: 0; border: 2px solid white;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.14);
+    background: var(--btn-regular-bg);
+  }
+  :global(html.dark) .tab-thumb { border-color: rgba(255,255,255,0.9); }
+  .tab-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tab-meta { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .tab-name { font-weight: 700; font-size: 0.95rem; line-height: 1.1; color: #111827; }
   :global(html.dark) .tab-name { color: #f3f4f6; }
-  .tab-detail { font-size: 0.76rem; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  :global(html.dark) .tab-detail { color: rgba(255,255,255,0.58); }
+  .tab-detail { font-size: 0.74rem; line-height: 1.2; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+  :global(html.dark) .tab-detail { color: rgba(255,255,255,0.60); }
+  .tab-check {
+    width: 1.35rem; height: 1.35rem; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--primary); color: white;
+    font-size: 0.7rem; font-weight: 800; flex-shrink: 0;
+  }
 
-  .dog-card {
+  .dog-showcase {
     border: 1px solid var(--line-divider, rgba(0,0,0,0.08));
     border-radius: var(--radius-large, 1rem);
-    overflow: hidden; background: var(--card-bg, white);
-    box-shadow: 0 8px 28px rgba(0,0,0,0.06);
+    overflow: hidden;
+    background: var(--card-bg, white);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.05);
   }
-  :global(html.dark) .dog-card { background: #1f242e; border-color: rgba(255,255,255,0.08); }
+  :global(html.dark) .dog-showcase {
+    background: oklch(0.23 0.015 var(--hue));
+    border-color: rgba(255,255,255,0.08);
+  }
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+  }
+  @media (max-width: 760px) { .showcase-grid { grid-template-columns: 1fr; } }
 
-  .hero { position: relative; aspect-ratio: 16 / 10; max-height: 22rem; overflow: hidden; background: #111; }
-  @media (max-width: 640px){ .hero{ aspect-ratio: 4 / 3; max-height: none; } }
-  .hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .hero-gradient {
+  .photo-wrap {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--btn-regular-bg, #f3f4f6);
+  }
+  @media (min-width: 761px) { .photo-wrap { aspect-ratio: 4 / 5; } }
+  @media (min-width: 1024px) { .photo-wrap { aspect-ratio: 1 / 1; max-height: 30rem; } }
+  .photo-wrap img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .photo-veil {
     position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.28) 42%, rgba(0,0,0,0.0) 72%);
+    background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.08) 45%, transparent 70%);
+    opacity: 1;
   }
-  .hero-text {
-    position: absolute; left: 1.15rem; right: 1.15rem; bottom: 1rem; color: white;
+  @media (min-width: 761px) { .photo-veil { opacity: 0; } }
+  .photo-caption {
+    position: absolute; left: 1rem; right: 1rem; bottom: 0.9rem;
+    color: white;
   }
-  .hero-text h3 { margin: 0; font-size: 1.85rem; font-weight: 800; letter-spacing: -0.02em; text-shadow: 0 1px 10px rgba(0,0,0,0.35); }
-  .hero-badges { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
-  .badge {
-    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em;
-    background: rgba(255,255,255,0.92); color: #111; border-radius: 999px; padding: 0.28rem 0.62rem; backdrop-filter: blur(6px);
+  @media (min-width: 761px) { .photo-caption { display: none; } }
+  .photo-caption h3 {
+    margin: 0; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em;
+    text-shadow: 0 1px 12px rgba(0,0,0,0.4);
   }
-  .badge.born { background: rgba(255,255,255,0.18); color: white; border: 1px solid rgba(255,255,255,0.28); }
+  .photo-caption p {
+    margin: 0.2rem 0 0; font-size: 0.8rem; font-weight: 500;
+    opacity: 0.92; text-shadow: 0 1px 8px rgba(0,0,0,0.35);
+  }
 
-  .card-body { padding: 1.15rem 1.15rem 1.05rem; color: #1f2937; }
-  :global(html.dark) .card-body { color: rgba(255,255,255,0.92); }
-  .embark-kicker {
-    display: flex; align-items: center; gap: 0.45rem;
-    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #6b7280; margin-bottom: 0.32rem;
+  .info-wrap {
+    display: flex; flex-direction: column;
+    padding: 1.25rem 1.3rem 1.2rem;
+    gap: 1.15rem;
+    min-width: 0;
   }
-  :global(html.dark) .embark-kicker { color: rgba(255,255,255,0.52); }
-  .kicker-dot { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--primary); display: inline-block; }
-  .embark-headline { margin: 0 0 1rem; font-size: 1.08rem; font-weight: 700; letter-spacing: -0.015em; color: #111827; }
-  :global(html.dark) .embark-headline { color: #f3f4f6; }
-  .embark-footnote { margin: 0.9rem 0 0; font-size: 0.78rem; color: #6b7280; }
-  :global(html.dark) .embark-footnote { color: rgba(255,255,255,0.48); }
+  @media (max-width: 760px) { .info-wrap { padding-top: 1.1rem; } }
+  .info-head { display: flex; flex-direction: column; gap: 0.45rem; }
+  @media (max-width: 760px) { .info-head { display: none; } }
+  .info-name {
+    margin: 0; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em;
+    color: #111827; line-height: 1;
+  }
+  :global(html.dark) .info-name { color: #f9fafb; }
+  .info-badges { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.15rem; }
+  .ibadge {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
+    border-radius: 999px; padding: 0.28rem 0.6rem; line-height: 1;
+    border: 1px solid var(--line-divider, rgba(0,0,0,0.08));
+  }
+  .ibadge.age {
+    background: var(--primary); color: white; border-color: var(--primary);
+  }
+  .ibadge.born {
+    background: var(--btn-regular-bg, #f3f4f6); color: #374151;
+  }
+  :global(html.dark) .ibadge.born {
+    background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.10);
+  }
+  .info-summary {
+    margin: 0.15rem 0 0; font-size: 0.88rem; line-height: 1.45; color: #6b7280;
+  }
+  :global(html.dark) .info-summary { color: rgba(255,255,255,0.62); }
+
+  .info-breeds { margin-top: auto; }
+  .embark-footnote { margin: 0.75rem 0 0; font-size: 0.76rem; color: #6b7280; line-height: 1.4; }
+  :global(html.dark) .embark-footnote { color: rgba(255,255,255,0.45); }
 </style>
-
 
