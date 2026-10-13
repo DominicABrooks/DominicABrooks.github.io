@@ -13,7 +13,7 @@
   let dogMarkerLayer: any;
   let selectedDog = "Kyle";
 
-  const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+  const tileUrl = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
   const tileAttribution = "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors";
 
   // Configuration for map categories
@@ -24,33 +24,92 @@
     visited: { color: "#3b82f6", label: "Visited" } // Blue
   };
 
-  // Actual data points from the provided Google Maps link
-  const locations = [
-    { name: "Walt Disney World", coords: [28.3772, -81.5707], category: "visited" },
-    { name: "Turkey Run State Park", coords: [39.8795, -87.2003], category: "visited" },
-    { name: "Northern Illinois! I went to college here", coords: [41.9295, -88.7504], category: "college" },
-    { name: "Raleigh! I live here", coords: [35.7796, -78.6382], category: "home" },
-    { name: "Myrtle Beach", coords: [33.6891, -78.8867], category: "visited" },
-    { name: "Pisgah National Forest", coords: [35.2828, -82.7287], category: "visited" },
-    { name: "Chicago", coords: [41.8818, -87.6232], category: "visited" },
-    { name: "Wisconsin Dells", coords: [43.6275, -89.7710], category: "visited" },
-    { name: "Pigeon Forge", coords: [35.7884, -83.5543], category: "visited" },
-    { name: "Universal Studios", coords: [28.4794, -81.4688], category: "visited" },
-    { name: "Washington DC", coords: [38.9072, -77.0369], category: "visited" },
-    { name: "Denver", coords: [39.7420, -104.9915], category: "visited" },
-    { name: "Aspida! I work here", coords: [35.9189, -78.9669], category: "work" },
-	{ name: "CivicServe! My first full-time QA job", coords: [40.4788, -88.9927], category: "work" },
-	// Peoria
-	{ name: "Peoria Illinois! I grew up here!", coords: [40.6936, -89.5890], category: "home" },
-	// St louis
-	{ name: "St Louis", coords: [38.6270, -90.1994], category: "visited" },
-	// Natural bridge Kentucky
-	{ name: "Natural Bridge", coords: [37.7768, -83.6833], category: "visited" },
-	// Savana Georgia 
-	{ name: "Savannah", coords: [32.0811, -81.0911], category: "visited" },
-    // Manhattan / New York City
-  { name: "New York City", coords: [40.7580, -73.9855], category: "visited" },
+  type Category = keyof typeof categoryConfig;
+  type Place = {
+    name: string;
+    place: string;
+    state: string;
+    coords: [number, number];
+    category: Category;
+    note: string;
+    chapter?: number;
+    // Worked remotely, so it doesn't count toward places I've been
+    remote?: boolean;
+  };
+
+  // `chapter` orders the places that appear in the timeline below the map
+  const locations: Place[] = [
+    { name: "Peoria", place: "Peoria, IL", state: "IL", coords: [40.6936, -89.5890], category: "home", chapter: 1,
+      note: "Where it all started. I grew up here, right on the Illinois River in the heart of central Illinois." },
+    { name: "Northern Illinois University", place: "DeKalb, IL", state: "IL", coords: [41.9295, -88.7504], category: "college", chapter: 2,
+      note: "I went to college at NIU in DeKalb, about an hour west of Chicago." },
+    { name: "Villain Games", place: "Weston, MA (remote)", state: "MA", coords: [42.3668, -71.3031], category: "work", chapter: 3, remote: true,
+      note: "Worked part time on Arena of Kings and the unreleased sequel doing QA & product up until I graduated college and got a job at CivicServe." },
+    { name: "CivicServe", place: "Bloomington, IL", state: "IL", coords: [40.4788, -88.9927], category: "work", chapter: 4,
+      note: "My first full-time QA job, and where I got my start in test automation." },
+    { name: "Raleigh", place: "Raleigh, NC", state: "NC", coords: [35.7796, -78.6382], category: "home", chapter: 5,
+      note: "Home now. Living in the Research Triangle puts the mountains and the beach both within a few hours' drive." },
+    { name: "Aspida", place: "Durham, NC", state: "NC", coords: [35.9189, -78.9669], category: "work", chapter: 6,
+      note: "Where I work today as an SDET, building test automation for insurtech." },
+    { name: "Chicago", place: "Chicago, IL", state: "IL", coords: [41.8818, -87.6232], category: "visited",
+      note: "Saw a Bears game and loved the Shedd Aquarium. I wish I'd visited more often when I lived so close!" },
+    { name: "St. Louis", place: "St. Louis, MO", state: "MO", coords: [38.6270, -90.1994], category: "visited",
+      note: "We came here even more than Chicago when I was a kid. Just as much fun, and a lot less stressful." },
+    { name: "Turkey Run State Park", place: "Marshall, IN", state: "IN", coords: [39.8795, -87.2003], category: "visited",
+      note: "Sandstone ravines, ladders, and some of the most fun hiking trails in Indiana." },
+    { name: "Wisconsin Dells", place: "Wisconsin Dells, WI", state: "WI", coords: [43.6275, -89.7710], category: "visited",
+      note: "A go-to trip from Illinois. We came up here all the time, first on family trips and later with friends." },
+    { name: "Natural Bridge", place: "Slade, KY", state: "KY", coords: [37.7768, -83.6833], category: "visited",
+      note: "Where I stopped to sleep on the drive down from Peoria when I moved to RTP. A 78-foot sandstone arch right next to the Red River Gorge." },
+    { name: "Pigeon Forge", place: "Pigeon Forge, TN", state: "TN", coords: [35.7884, -83.5543], category: "visited",
+      note: "My dad's side of the family had a wedding here! I've been back a few times since. I love being surrounded by the Smoky Mountains." },
+    { name: "Pisgah National Forest", place: "Western NC", state: "NC", coords: [35.2828, -82.7287], category: "visited",
+      note: "Went car camping here with my dog Echo. The highlight was Mount Mitchell and the views of the Blue Ridge Mountains." },
+    { name: "Myrtle Beach", place: "Myrtle Beach, SC", state: "SC", coords: [33.6891, -78.8867], category: "visited",
+      note: "For some reason, I walked about 8 miles down the beach until 1 AM." },
+    { name: "Savannah", place: "Savannah, GA", state: "GA", coords: [32.0811, -81.0911], category: "visited",
+      note: "Spanish moss, historic squares, and cobblestone River Street." },
+    { name: "Walt Disney World", place: "Orlando, FL", state: "FL", coords: [28.3772, -81.5707], category: "visited",
+      note: "Went as a kid. Honestly, I was too young to remember much!" },
+    { name: "Universal Orlando", place: "Orlando, FL", state: "FL", coords: [28.4794, -81.4688], category: "visited",
+      note: "Went in 2025 to check out the new Epic Universe park. Super Nintendo World was hands-down my favorite." },
+    { name: "Washington, D.C.", place: "Washington, D.C.", state: "DC", coords: [38.9072, -77.0369], category: "visited",
+      note: "Went here with my family as a kid. I distinctly remember how cool the National Mall was." },
+    { name: "New York City", place: "New York, NY", state: "NY", coords: [40.7580, -73.9855], category: "visited",
+      note: "Stayed in Flushing, Queens, and headed into Manhattan to watch every screen in Times Square flip at midnight. Kyle has been here too!" },
+    { name: "Denver", place: "Denver, CO", state: "CO", coords: [39.7420, -104.9915], category: "visited",
+      note: "I visited when I was really young, but it's still the farthest west I've ever been." },
   ];
+
+  const home = locations.find((loc) => loc.name === "Raleigh")!;
+  const journey = locations.filter((loc) => loc.chapter).sort((a, b) => a.chapter! - b.chapter!);
+  const statesCount = new Set(locations.filter((loc) => !loc.remote).map((loc) => loc.state).filter((s) => s !== "DC")).size;
+  const farthestMiles = Math.round(Math.max(...locations.map((loc) => milesBetween(home.coords, loc.coords))));
+
+  let selectedName = "";
+  let pinLayer: any;
+  const markers = new Map<string, any>();
+
+  function milesBetween([lat1, lon1]: [number, number], [lat2, lon2]: [number, number]) {
+    const toRad = (deg: number) => (deg * Math.PI) / 180;
+    const a = Math.sin(toRad(lat2 - lat1) / 2) ** 2
+      + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(toRad(lon2 - lon1) / 2) ** 2;
+    return 3959 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  function popupHtml(loc: Place) {
+    const category = categoryConfig[loc.category];
+    return `<b>${loc.name}</b><br><span style="color:${category.color};font-weight:600">${category.label}</span> · ${loc.place}<p style="margin:0.4rem 0 0">${loc.note}</p>`;
+  }
+
+  function focusPlace(loc: Place) {
+    selectedName = loc.name;
+    if (!map) return;
+    mapElement.scrollIntoView({ behavior: "smooth", block: "center" });
+    map.closePopup();
+    map.once("moveend", () => markers.get(loc.name)?.openPopup());
+    map.flyTo(loc.coords, 9, { duration: 1.2 });
+  }
 
   const dogLocations = {
     Kyle: [
@@ -117,14 +176,14 @@
 
           Leaflet.tileLayer(tileUrl, {
             attribution: tileAttribution,
-            subdomains: 'abcd',
-            maxZoom: 20
+            maxZoom: 19
           }).addTo(mapInstance);
 
           // Add markers
+          pinLayer = Leaflet.featureGroup().addTo(mapInstance);
           locations.forEach(loc => {
-            const category = categoryConfig[loc.category as keyof typeof categoryConfig] || categoryConfig.visited;
-            Leaflet.circleMarker(loc.coords as [number, number], {
+            const category = categoryConfig[loc.category];
+            const marker = Leaflet.circleMarker(loc.coords, {
               radius: 8,
               fillColor: category.color,
               color: "#000",
@@ -132,9 +191,12 @@
               opacity: 1,
               fillOpacity: 0.8
             })
-            .bindPopup(`<b>${loc.name}</b>`)
-            .addTo(mapInstance);
+            .bindPopup(popupHtml(loc), { maxWidth: 260 })
+            .on("click", () => { selectedName = loc.name; })
+            .addTo(pinLayer);
+            markers.set(loc.name, marker);
           });
+          mapInstance.fitBounds(pinLayer.getBounds(), { padding: [30, 30] });
 
           // Add Legend
           const legend = Leaflet.control({ position: "bottomright" });
@@ -170,8 +232,7 @@
             dogMap = Leaflet.map(dogMapElement).setView([35.7796, -78.6382], 6);
             Leaflet.tileLayer(tileUrl, {
               attribution: tileAttribution,
-              subdomains: 'abcd',
-              maxZoom: 20
+              maxZoom: 19
             }).addTo(dogMap);
             renderDogLocations(Leaflet);
 
@@ -193,11 +254,121 @@
   });
 </script>
 
+<div class="stats">
+  <div class="stat"><span class="stat-value">{locations.length}</span><span class="stat-label text-50">pins on the map</span></div>
+  <div class="stat"><span class="stat-value">{statesCount}</span><span class="stat-label text-50">states + D.C.</span></div>
+  <div class="stat"><span class="stat-value">{farthestMiles.toLocaleString()}</span><span class="stat-label text-50">miles from home to my farthest pin</span></div>
+</div>
+
 <div class="map-container">
   <div bind:this={mapElement} class="map"></div>
 </div>
 
+<section class="section">
+  <ol class="journey">
+    {#each journey as loc, i}
+      <li>
+        <button class="journey-step" class:selected={selectedName === loc.name} on:click={() => focusPlace(loc)}>
+          <span class="dot" style="background:{categoryConfig[loc.category].color}"></span>
+          <span class="journey-chapter text-50">Chapter {i + 1} · {categoryConfig[loc.category].label}</span>
+          <span class="journey-name text-90">{loc.name}</span>
+          <span class="journey-place text-50">{loc.place}</span>
+          <span class="journey-note text-75">{loc.note}</span>
+        </button>
+      </li>
+    {/each}
+  </ol>
+</section>
+
 <style>
+  .stats {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: 1rem;
+  }
+
+  .stat {
+    background: var(--btn-regular-bg);
+    border-radius: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 1rem;
+  }
+
+  .stat-value {
+    color: var(--primary);
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+  }
+
+  .section {
+    margin-top: 1.75rem;
+  }
+
+  .journey {
+    border-left: 2px dashed var(--line-divider);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0 0 0 0.5rem;
+    padding: 0;
+  }
+
+  .journey-step {
+    background: none;
+    border: 0;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    display: grid;
+    font: inherit;
+    padding: 0.6rem 0.9rem 0.6rem 1.5rem;
+    position: relative;
+    text-align: left;
+    transition: background 0.15s;
+    width: 100%;
+  }
+
+  .journey-step:hover,
+  .journey-step.selected {
+    background: var(--btn-regular-bg);
+  }
+
+  .journey-step .dot {
+    border: 2px solid var(--card-bg);
+    border-radius: 50%;
+    height: 0.9rem;
+    left: -0.5rem;
+    position: absolute;
+    top: 1rem;
+    width: 0.9rem;
+  }
+
+  .journey-chapter {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .journey-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .journey-place {
+    font-size: 0.85rem;
+  }
+
+  .journey-note {
+    margin-top: 0.25rem;
+  }
+
   .map-container {
     width: 100%;
     height: 600px;
@@ -282,4 +453,14 @@
 
   .dog-map-key .lived { background: #10b981; }
   .dog-map-key .visited { background: #3b82f6; }
+
+  @media (max-width: 640px) {
+    .stat-value {
+      font-size: 1.35rem;
+    }
+
+    .map-container {
+      height: 420px;
+    }
+  }
 </style>
