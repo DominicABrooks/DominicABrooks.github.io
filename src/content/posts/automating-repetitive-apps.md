@@ -8,26 +8,27 @@ category: 'Test Automation'
 draft: false 
 ---
 
-After a focused effort, we lifted critical capabilities coverage from 15% to 100%, dramatically reducing maintenance overhead.
-When you aren't the one creating the test cases, I find many companies ask QAE teams to automate long, repetitive end-to-end flows. For example hundreds of regression test cases filling out eApplications. These flows are often based off of manual test cases, not necessarily designed with automation in mind.
+After a focused effort, we lifted automated coverage of our critical capabilities from 15% to 100%, without the suite becoming a maintenance burden.
 
-I've automated regression suites for teams such as CivicServe eApp and worked on existing eApp frameworks such as Aspida eApp, as well as built frameworks for our third-party eApp vendors such as Firelight and AnnuityNet, and Affirm. 
+When QA teams aren't the ones designing the test cases, they're often asked to automate long, repetitive end-to-end flows. For example, hundreds of regression test cases that fill out insurance eApplications. These flows usually start life as manual test cases, so designing them well for automation makes a big difference.
 
-From my experiences working in other frameworks, building my own, and designing them with others I now have a pretty opinionated set of patterns and practical tricks that make those large E2E suites resilient to change I like to enforce.
+I've automated regression suites for internal eApp platforms, contributed to existing eApp frameworks, and built frameworks for several third-party eApp vendors.
 
-Not saying these rules are perfect, but they absolutely have worked for me, and have made maintaining these suites pretty easy.
+From working in other frameworks, building my own, and designing them with others, I've landed on an opinionated set of patterns that keep these large E2E suites resilient to change.
+
+These patterns have worked really well for me and have made maintaining these suites much easier.
 
 ### Page Object Model with Intent-Based Actions
 
-One thing I've realized is key to maintainable page objects is focusing on business actions rather than UI implementations. Public methods should describe what the user wants to achieve, not how the UI makes it happen.
+One thing I've realized is key to maintainable page objects is focusing on business actions rather than UI implementations. Public methods should describe what the user wants to achieve, and leave the UI details inside the page object.
 
 So many times a function will be very specific to the implementation, and has to be changed in nearly every single spec file in order to be accurate to the actions being completed.
 
-#### Why avoid action verbs in public methods?
+#### Why use intent-based names for public methods?
 
 Instead of exposing UI mechanics like `clickSubmit()` or `fillFirstName()`, create methods that represent complete actions or logical units of information. This makes tests more resilient to UI changes and keeps them focused on business scenarios.
 
-:::caution[What to Avoid]
+:::caution[Before]
 UI-mechanics focused
 ::: 
 ```ts
@@ -37,11 +38,11 @@ await page.clickNextButton();
 await page.selectFromDropdown('Owner');
 ```
 
-:::tip[Best Practice]
+:::tip[After]
 Intent-focused
 :::
 ```ts
-await page.addOwnerDetails({
+await page.fillOwnerInformation({
   firstName: 'John',
   role: 'Owner'
 });
@@ -73,7 +74,8 @@ export class ApplicationPage extends PageComponent {
     return this.page.getByRole('option', { name: role });
   }
 
-  // Private field setters
+  // Private field setters. withOptionalValue (defined on PageComponent)
+  // skips the setter when the value is undefined, so callers can pass partial data
   private setFirstName = this.withOptionalValue(async (value: string) => {
     await this.firstNameField.fill(value);
   });
@@ -84,8 +86,8 @@ export class ApplicationPage extends PageComponent {
   });
 
   // Public methods express business intent
-  async addOwnerInformation(info: { 
-    firstName?: string; 
+  async fillOwnerInformation(info: {
+    firstName?: string;
     role?: string;
   }) {
     await this.setFirstName(info.firstName);
@@ -116,16 +118,16 @@ async fillOwnerInformation(payload: {
 ```
 
 :::tip
-Keep all selectors within page objects, treating them as the single source of truth for UI interactions. When elements move or change, updates only need to happen in one place
+Keep all selectors within page objects, treating them as the single source of truth for UI interactions. When elements move or change, updates only need to happen in one place.
 :::
 
 ### Centralized Data Factories and Fixtures
 
 Another crucial pattern is centralizing test data generation in factories and fixtures. This ensures that when data requirements change (e.g., new validation rules), you only need to update one place instead of hundreds of tests.
 
-A nightmare I ran into was someone storing all their auth data (email, id, username, password) at the start of every test. Inevitably when the password requirements changed and this password needed to be changed, we were stuck refactoring hundreds of spec files to refactor how we were pulling the auth data.
+Auth data is a great example. When credentials (email, ID, username, password) live in a factory, a change to password requirements becomes a one-line update instead of a change across hundreds of spec files.
 
-This isn't too terrible because it's a few static strings, but I can imagine there's going to be scenarios where this waste days of effort to refactor. Especially validation logic changes that make you go back and analyze your test data across all the tests
+The payoff grows with every validation rule change: you update the factory once, and every test picks it up automatically.
 
 ```ts
 // fixtures/data-factories.ts
@@ -170,14 +172,14 @@ Then your tests stay clean and use the fixture data:
 
 ```ts
 test('can submit owner application', async ({ page, owner }) => {
-  const appPage = new ExampleApplicationStepPage(page);
+  const appPage = new ApplicationPage(page);
   await appPage.fillOwnerInformation(owner);
   // ... rest of test
 });
 
 // Need different data? Override just what you need
 test('handles missing contact info', async ({ page, owner }) => {
-  const appPage = new ExampleApplicationStepPage(page);
+  const appPage = new ApplicationPage(page);
   await appPage.fillOwnerInformation({
     ...owner,
     contact: undefined
@@ -185,7 +187,8 @@ test('handles missing contact info', async ({ page, owner }) => {
 });
 ```
 
-Data factories provide a single source of truth for test data, letting you build complex objects from smaller factories while maintaining type safety. This keeps tests focused on behavior and avoids using literals you'll need to change across multiple tests.
+Data factories provide a single source of truth for test data, letting you build complex objects from smaller factories while maintaining type safety. This keeps tests focused on behavior and keeps your data easy to update in one place.
 
 ## Closing
-Automating repetitive, long E2E flows isn’t usually a good idea. But with careful design, strong OOP practices, and defensive helpers, it's possible to make these flows not an absolute nightmare to maintain.
+
+The best test strategies balance every layer of the pyramid (I wrote more about that in [Getting the Most Value From Your E2E Tests](/posts/stop-writing-e2e/)). When the business needs broad E2E coverage, intent-based page objects, partial-data methods, and centralized data factories make even large suites easy to maintain.

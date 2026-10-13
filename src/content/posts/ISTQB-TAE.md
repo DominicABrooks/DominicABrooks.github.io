@@ -1,5 +1,4 @@
 ---
-
 title: "I'm now a Certified Test Automation Engineer"
 description: "My experience getting ISTQB Advanced Test Automation Engineer certified and how it compares to CTFL"
 published: 2026-09-02
@@ -8,7 +7,7 @@ tags: [ISTQB, Certification, Test Automation, TAE, QA Engineering]
 category: 'Quality Assurance'
 image: '../../assets/images/astqb-TAE.png'
 draft: false
-------------
+---
 
 I recently passed the ISTQB Advanced Level Test Automation Engineer (CTAL-TAE) exam and earned my ASTQB TAE certification. Like CTFL back in November, I spent about a week studying for it. I also enjoyed this one quite a bit.
 
@@ -35,55 +34,43 @@ For example, I've worked with Page Objects, abstraction layers, separated test d
 
 That's probably the biggest difference I noticed compared to CTFL. CTFL gives you a lot of testing terminology. TAE gives you a way to think about the architecture behind your automation.
 
-## The Good: Architecture Over Scripts
+## Highlight: Architecture Over Scripts
 
-This is where I think TAE is much more useful than CTFL.
+This is where TAE builds on CTFL the most.
 
 The certification treats test automation as software. You have architecture, technical debt, maintenance costs, deployment risks, reporting, and a lifecycle. That sounds obvious if you've spent years building automation, but it's surprisingly easy for automation teams to focus almost entirely on writing tests.
 
 The gTAA was probably the most useful part for me. Having a common way to talk about things like the Test Adaptation Layer and the different responsibilities within an automation architecture makes design discussions easier.
 
-It also made me look at some of the frameworks I've worked with differently. You can have hundreds of tests and still have a pretty poor automation solution if the underlying architecture makes those tests difficult to maintain.
+It also made me look at some of the frameworks I've worked with differently. A great automation solution isn't measured by test count. It's measured by how easy those tests are to maintain, and that comes from the underlying architecture.
 
 I built the [istqb-tae-quiz](https://github.com/DominicABrooks/istqb-tae-quiz) specifically to drill these concepts. Each question maps back to a learning objective from the syllabus, so instead of repeatedly reading the PDF, I could actually test myself on the material. The source material is also included in [`/ref`](https://github.com/DominicABrooks/istqb-tae-quiz/tree/main/ref).
 
-## The Critical: It's Still Pretty Prescriptive
+## Applying It to Real Projects
 
-My biggest complaint with CTFL was how prescriptive it could be. There was a lot of material where the real answer is "it depends," but the certification still wants you to choose the textbook answer.
+Like CTFL, TAE describes an ideal path. The syllabus walks through evaluating automation tools, running a pilot, getting stakeholder buy-in, defining responsibilities, and then gradually rolling out the solution.
 
-TAE has some of the same problem.
+That's a great playbook for a new automation project, and the same ideas carry over to existing ones too.
 
-For example, the syllabus describes a world where you can properly evaluate automation tools, run a pilot, get stakeholder buy-in, define responsibilities, and then gradually roll out the solution.
+Often you join a team that already has a suite in place, maybe hundreds of Playwright tests and a busy CI pipeline. That's where TAE really shines for me: the gTAA gives you a map for improving what's already there, one layer at a time, while the product keeps moving.
 
-That's great if you're starting a new automation project with plenty of time and organizational support.
+Tool selection works the same way. A weighted decision matrix is a useful way to make the trade-offs explicit, even when the right answer is the tool another team already uses, the language your developers already know, or the natural next step from an existing Selenium suite.
 
-It's less useful when you join a team and someone hands you a repository containing 400 flaky Playwright tests and a CI pipeline that times out.
+TAE also covers layered and keyword-driven approaches, which are a great fit for large organizations with many contributors. For smaller teams, a clean Playwright framework with good test data separation, Page Objects, and sensible abstractions often covers everything you need, and the gTAA helps you recognize when it's time to add more structure.
 
-In practice, teams often don't get to design their automation architecture from scratch. You inherit whatever is already there and try to make it better while the product continues changing.
-
-The same thing applies to tool selection. In the real world, you might choose Playwright because another team already uses it, because your developers know TypeScript, or because you're replacing an old Selenium suite. You probably aren't going to spend weeks evaluating five different tools against a weighted decision matrix.
-
-TAE also presents layered and keyword-driven approaches as part of the more mature end of automation architecture. Those approaches can make sense for large organizations, but I wouldn't automatically consider them better.
-
-Sometimes a relatively simple Playwright framework with good test data separation, Page Objects, and sensible abstractions is all you need. Adding another architectural layer doesn't automatically make the system better.
-
-That's probably the biggest thing I'd keep in mind when studying for the certification: **the exam answer and the answer I'd choose for a real project aren't always the same thing.**
-
-The difference is that TAE's recommendations are generally useful things to adapt from. I just wouldn't treat the diagrams as mandatory architecture.
+That's the mindset I'd recommend when studying: **learn the exam answer, then think about how you'd tailor it to your own project.** TAE's recommendations are a strong foundation to adapt from.
 
 ## Still Worth It
 
 I think TAE is worth getting, especially if you're already doing test automation professionally.
 
-I wouldn't get it because I expect a recruiter to see "CTAL-TAE" on my resume and suddenly care. Hands-on experience building automation is still much more important.
+Hands-on experience building automation still matters more than any certification. The value for me was having a vocabulary and framework for the architecture decisions I already make every day.
 
-The value for me was having a framework for thinking about things I already deal with.
+The gTAA gives you a vendor-neutral way to talk about automation architecture. The sections on tool selection and deployment give you a checklist for problems that are easy to overlook. The reporting and TAS verification sections cover areas that are easy to overlook and pay off quickly.
 
-The gTAA gives you a vendor-neutral way to talk about automation architecture. The sections on tool selection and deployment give you a checklist for problems that are easy to overlook. The reporting and TAS verification sections also cover areas that automation teams don't always think about until something goes wrong.
+I especially liked the emphasis on verifying the automation itself. That's what turns thousands of passing tests into results the whole team can trust.
 
-I especially liked the emphasis on verifying the automation itself. A test suite isn't automatically trustworthy just because it has thousands of passing tests.
-
-There is a lot in TAE that I probably wouldn't implement exactly as written. That's fine. I don't think the certification needs to give you a perfect blueprint. It's more useful as a reference when you're making design decisions.
+I think of TAE as a reference for design decisions, not a blueprint, and that flexibility is what makes it useful across so many different teams.
 
 ## What's Next
 
@@ -97,10 +84,8 @@ I don't have another ISTQB certification planned right now. I've actually been s
 
 If you're deciding between CTFL and TAE, I'd do CTFL first if you haven't already. The vocabulary is useful, and it's the prerequisite anyway. After that, I'd wait until you've actually spent some time building or maintaining automation before doing TAE.
 
-A lot of the material makes more sense once you've experienced the problems it's talking about.
+The material really clicks once you've seen the situations it describes firsthand.
 
-Real-world automation is still messy. You inherit technical debt, deadlines don't move, tools get replaced, tests become flaky, and nobody has time to implement the perfect architecture.
+Real-world automation keeps evolving: codebases grow, deadlines shift, tools get replaced, and priorities change. TAE gives you a solid framework for making good decisions through all of it.
 
-TAE doesn't change any of that.
-
-If you're on the fence about taking it, I'd recommend it once you've got a year or two of automation experience. Not because anyone cares, but because continued education is fun
+If you're on the fence about taking it, I'd recommend it once you've got a year or two of automation experience. It won't replace hands-on experience, but it will sharpen how you think about and explain the automation you build.

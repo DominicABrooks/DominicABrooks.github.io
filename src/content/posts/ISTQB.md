@@ -6,10 +6,10 @@ updated: 2025-11-21
 tags: [ISTQB, Certification, QA Engineering, Testing]
 category: 'Quality Assurance'
 image: '../../assets/images/astqb.jpg'
-draft: false 
+draft: false
 ---
 
-I recently passed the ISTQB Certified Tester Foundation Level (CTFL) exam and earned my ASTQB certification. I took the exam on November 14th and scored 87.5% (needed 65% to pass). It took about a week of studying, and overall, I had fun with it.
+I recently passed the ISTQB Certified Tester Foundation Level (CTFL) exam and earned my ASTQB certification. I took the exam on November 14th and scored 87.5% (65% is needed to pass). It took about a week of studying, and I had a lot of fun with it.
 
 I just received a congratulatory letter from Margaret Murry, Certification Director at ASTQB, so it's official enough now to make a blog post about it. Shoutout to my employer, Aspida, for paying for the exam.
 
@@ -24,9 +24,9 @@ The ISTQB Foundation Level covers the fundamentals of software testing, includin
 
 The certification provides a solid vocabulary and framework for discussing testing concepts. It's helpful to have a common language when talking about testing with other professionals, especially across different organizations.
 
-## The Good: Vocabulary and Fundamentals
+## Highlight: Vocabulary and Fundamentals
 
-ISTQB does a good job establishing baseline knowledge. The certification covers important concepts like:
+ISTQB does a great job establishing baseline knowledge. The certification covers important concepts like:
 
 - Equivalence partitioning and boundary value analysis
 - Statement, decision, and path coverage
@@ -35,35 +35,34 @@ ISTQB does a good job establishing baseline knowledge. The certification covers 
 
 Having this shared vocabulary makes it easier to communicate with other testers and stakeholders. When someone mentions "boundary value analysis" or "equivalence partitioning," everyone certified knows exactly what that means.
 
-## The Critical: Rigidity vs. Reality
+## Applying It to Your Team
 
-Here's where I have issues with ISTQB: the framework is incredibly rigid and prescriptive, which contradicts one of their own fundamental principles.
+My favorite of the seven testing principles is **"Testing is context dependent."** I think it's also the key to getting the most out of the rest of the syllabus.
 
-One of the seven principles of testing is **"Testing is context dependent."** Yet throughout the syllabus, ISTQB continuously presents strict rules about roles, responsibilities, and test cycle expectations that completely bypass this.
+The syllabus describes testing in a fully staffed organization, with dedicated test managers, test analysts, and technical test analysts, each with clearly defined responsibilities. That's a valuable reference model, and it's worth understanding why each of those responsibilities exists.
 
-Most companies don't have the resources to do testing in the hyper-specialized way ISTQB describes. In the real world:
+In practice, teams adapt it to fit their size and pace:
 
-- QA engineers often wear multiple hats (manual testing, automation, test planning, DevOps)
-- Test phases overlap and iterate rather than following strict sequential processes
-- Teams adapt their testing approach based on project constraints, not textbook definitions
-- The "ideal" test process described in ISTQB is often impractical for smaller teams or fast-moving projects
+- QA engineers often cover several of those roles at once (manual testing, automation, test planning, DevOps)
+- Test phases tend to overlap and iterate
+- Teams tailor their process to their project's goals and constraints
 
-The certification presents testing as if every organization has dedicated test managers, test analysts, and technical test analysts with clearly separated responsibilities. In reality, many teams have one or two QA engineers handling everything.
+That's exactly what the context-dependent principle encourages. I've found it most valuable to treat the processes as a menu of proven practices to choose from, and to pick the ones that fit your team best.
 
-## Still Worth It
+## Worth It
 
-Despite my criticisms, I think ISTQB CTFL is a good starting point for anyone in QA. It provides:
+I think ISTQB CTFL is a great starting point for anyone in QA. It provides:
 
 - A structured overview of testing concepts
 - Common terminology for the industry
 - A baseline understanding of test techniques and processes
 - Recognition that's valued by many employers
 
-Just take the rigid processes with a grain of salt. Use the principles and techniques as tools in your toolbox, not as strict rules to follow.
+Use the principles and techniques as tools in your toolbox, and shape the processes around your team.
 
 ## What's Next
 
-I'm planning to attempt the ISTQB Advanced Test Automation Engineer (TAE) certification next. I'm curious to see if the advanced level provides more practical, context-aware guidance or if it continues the same prescriptive approach.
+I'm planning to attempt the ISTQB Advanced Test Automation Engineer (TAE) certification next. I'm looking forward to seeing how the advanced level applies these ideas specifically to automation.
 
 The TAE certification focuses on:
 
@@ -72,12 +71,12 @@ The TAE certification focuses on:
 - Test automation deployment and maintenance
 - Metrics and reporting for test automation
 
-This aligns more closely with my day-to-day work, so I'm hoping it will be more immediately applicable than the Foundation Level.
+This aligns closely with my day-to-day work, so I'm excited to put it into practice right away.
 
 ## Final Thoughts
 
-The ISTQB CTFL certification is a solid foundation, but remember that real-world testing is messy, context-dependent, and requires adapting these principles to your specific situation. Don't let the rigid framework make you think there's only one "right" way to test.
+The ISTQB CTFL certification is a solid foundation. Its real strength is giving you principles you can adapt to any team, project, or organization.
 
-Testing is about finding bugs, providing information to stakeholders, and helping deliver quality software. How you get there depends on your context, your team, and your constraints.
+Testing is about finding bugs, providing information to stakeholders, and helping deliver quality software. How you get there depends on your context, your team, and your goals, and CTFL gives you a great set of tools for figuring that out.
 
-Thanks again to Aspida for supporting my professional development and covering the certification cost. If you're considering the ISTQB CTFL, I'd say go for it, but keep your expectations realistic about how directly it will apply to your daily work.
+Thanks again to Aspida for supporting my professional development and covering the certification cost. If you're considering the ISTQB CTFL, I'd say go for it.
