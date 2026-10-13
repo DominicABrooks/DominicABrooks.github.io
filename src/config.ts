@@ -8,7 +8,7 @@ import type {
 import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
-	title: "Dom",
+	title: "Dominic Brooks",
 	subtitle: "Blog",
 	lang: "en", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
@@ -39,10 +39,7 @@ export const siteConfig: SiteConfig = {
 export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
-		{
-			name: "Map",
-			url: "/travel/",
-		},
+		LinkPreset.Map,
 		LinkPreset.About,
 	],
 };
