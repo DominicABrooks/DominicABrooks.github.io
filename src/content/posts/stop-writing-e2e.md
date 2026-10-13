@@ -1,6 +1,6 @@
 ---
-title: "E2E Tests Are Too Expensive"
-description: "Sometimes the better solution is the less comfortable one"
+title: "Getting the Most Value From Your E2E Tests"
+description: "Building a test strategy where every layer does what it does best"
 published: 2026-02-16
 updated: 2026-02-16
 tags: [Testing Strategy, Playwright, Engineering Leadership]
@@ -8,7 +8,7 @@ category: "Engineering"
 draft: false
 ---
 
-E2E tests *feel* like the best approach.
+E2E tests are one of the most compelling tools in testing.
 
 - They're readable.
 - They're demonstrable.
@@ -17,84 +17,67 @@ E2E tests *feel* like the best approach.
 - You see the button click.
 - You see the success toast.
 
-It *feels* definitive.
+They give everyone confidence.
 
 QA teams love them. Management loves them. The dashboard looks impressive.
 
-The suite keeps growing.
-
-You add more parallelization.  
-You add more containers.  
-You hire more QA engineers to maintain the suite.  
-
-Non-prod defect rates are high.
-
-Stories reach QA completely broken.  
-Hotfixes require an overnight 3-hour run across hundreds of containers.  
-
-Something **is** wrong.
+That's exactly why it's worth being intentional about what you ask them to do. When an E2E suite is focused on the right things, it's fast, reliable, and gives the whole team confidence to ship.
 
 ---
 
-## You're Testing the Wrong Things at the Wrong Level
+## Testing Each Thing at the Right Level
 
-E2E tests are being used to validate *business logic* that should never have made it that far.
-
-You *can* test through QA-level end-to-end tests.
-
-It’s just wildly expensive.
+The biggest win I've seen comes from validating *business logic* as early as possible, and saving E2E tests for what only they can verify.
 
 Think about this scenario:
 
 An endpoint starts returning `"100"` instead of `100`.  
-A type change
+A simple type change.
 
-Instead of being caught in a pull request by a fast unit or integration test, it:
+When a fast unit or integration test catches it, the fix happens in the pull request, in seconds, before anyone else is involved.
+
+When it's only caught by an E2E test, the same bug travels a much longer path:
 
 1. Breaks an E2E test.
-2. Fails in a 3-hour CI run.
+2. Fails in a long CI run.
 3. Requires QA review.
 4. Generates a defect ticket.
 5. Gets triaged.
 6. Gets reprioritized.
 7. Gets fixed.
-8. Gets rerun through the same expensive pipeline.
+8. Gets rerun through the full pipeline.
 
-All of this over something that could’ve been caught in seconds in a staging PR.
+Catching it early saves everyone that time.
 
 ---
 
-## Engineering Is a Pyramid, Not a Monolith
+## Building on a Strong Foundation: The Test Pyramid
 
-Your test strategy should look like this:
+A strategy that scales well looks like this:
 
-### Base Layer Unit Tests
+### Base Layer: Unit Tests
 - Validate business logic
 - Catch edge cases
 - Run in milliseconds
 - Execute on every commit
 
-### Middle Layer Integration & Contract Tests
+### Middle Layer: Integration & Contract Tests
 - Validate service boundaries
 - Catch schema/type regressions
 - Ensure systems agree on expectations
 
-### Top Layer End-to-End Tests
+### Top Layer: End-to-End Tests
 - Validate critical user journeys
-- Ensure no catastrophic production failures
-- Increase confidence not prove correctness
+- Protect against major production failures
+- Increase confidence across the whole system
 
-E2E tests are supposed to **increase confidence**, not serve as your primary regression mechanism.
-
-If you're testing all business rules through Playwright-level flows, you're building a skyscraper with no foundation.
+With a strong foundation underneath, E2E tests can do what they do best: **increase confidence** that the product works for real users.
 
 ---
 
-## What E2E Tests Are Actually For
+## What E2E Tests Do Best
 
-You don't need 2,000.
-
-You need enough to answer:
+A focused E2E suite answers the questions that matter most:
 
 - Can a user sign up?
 - Can they pay?
@@ -105,27 +88,27 @@ E2E tests protect the business.
 
 Unit and integration tests protect the engineers.
 
-If you're relying on QA to validate business logic through UI automation, you're using your most expensive testing layer to solve the cheapest category of bugs.
+When each layer handles the category of bugs it's best at catching, your most valuable testing layer stays fast, stable, and focused.
 
 ---
 
-## If You Want to Move Faster
+## How to Move Faster
 
-If you're serious about:
+If you're aiming for:
 
 - Faster time to market  
 - Lower CI costs  
-- Fewer triage loops  
-- Reduced QA burnout  
-- Higher developer ownership  
+- Quicker triage  
+- A happier, more productive QA team  
+- Stronger developer ownership  
 
-Then stop relying on outdated testing habits.
+Then start building quality in at every layer:
 
-Start:
+- Add unit and integration test gates to pull requests.
+- Add contract validation at service boundaries.
+- Ask during RCA: *Where's the earliest place we could catch this?*
+- Make logic coverage part of the PR before QA ever sees it.
 
-- Enforcing unit and integration test gates.
-- Adding contract validation at service boundaries.
-- Asking during RCA: *Could this have been caught lower?*
-- Holding PRs accountable for logic coverage before QA ever sees it.
+Every bug caught lower in the pyramid is dramatically cheaper.
 
-Every bug caught lower in the pyramid is exponentially cheaper.
+E2E suites still play an important role. Sometimes the business needs broad regression coverage at the UI level, and when it does, good design makes all the difference. I wrote about the patterns I use in [Design Patterns for 100% Critical Coverage](/posts/automating-repetitive-apps/).

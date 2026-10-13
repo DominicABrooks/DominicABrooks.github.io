@@ -8,7 +8,7 @@ category: 'Quality Assurance'
 draft: false
 ---
 
-This year, I watched an insurtech company I work with successfully transition to the Spotify model. They moved from the traditional department structure to cross-functional squads. It looked good in theory. Turns out, it mostly worked. But it also exposed something important about how QA fits into this structure.
+This year, I watched an insurtech company I work with successfully transition to the Spotify model. They moved from the traditional department structure to cross-functional squads. It worked well, and it taught me a lot about how QA fits best into this structure.
 
 ## What is the Spotify Model?
 
@@ -37,11 +37,11 @@ Done right, the Spotify model actually does improve how teams work together:
 
 ## The QA Consideration
 
-Here's one thing worth knowing though, the Spotify model works best when you have enough QA capacity to embed in each squad, or when there's a whole-team quality culture like an Amazon.
+Here's one thing worth knowing: the Spotify model works best when you have enough QA capacity to embed in each squad, or when there's a whole-team quality culture where developers own testing.
 
-In my experience, most organizations, and especially smaller, ones don't have unlimited QA budgets. When you have many developers spread across multiple squads but only a handful of QA engineers, true squad autonomy becomes harder to achieve. You end up with rotating QA assignments or cross functional support rather than dedicated squad members.
+In my experience, most organizations, especially smaller ones, have to be thoughtful about how they allocate QA. When you have many developers across multiple squads and a handful of QA engineers, rotating QA assignments or cross-functional support can work well alongside dedicated squad members.
 
-This isn't a deal breaker, it's just the reality. Some companies solve it by investing in QA hiring. Others shift testing left and have developers write integration and API tests. The smartest ones do both: they invest in QA where it matters most (exploratory testing, edge cases, business logic validation) while leveraging developer testing for speed.
+There are great ways to handle this. Some companies solve it by investing in QA hiring. Others shift testing left and have developers write integration and API tests. The smartest ones do both: they invest in QA where it matters most (exploratory testing, edge cases, business logic validation) while leveraging developer testing for speed.
 
 ## When the Spotify Model Shines for QA
 
@@ -63,16 +63,16 @@ The company I worked with succeeded because they:
 
 3. **Created QA chapters with authority.** QA engineers weren't just embedded, they also met regularly to share knowledge, set standards, and coordinate testing strategy across squads.
 
-4. **Were honest about constraints.** They didn't pretend they had unlimited resources. They made intentional trade offs and adapted the model to their reality.
+4. **Planned around their resources.** They made intentional trade-offs and adapted the model to fit their team.
 
 ## The Bottom Line
 
 The Spotify model is genuinely effective for organizations willing to support it properly. It creates better ownership, faster decision making, and more engaged teams. For QA specifically:
 
 - It works great if you invest in QA capacity or developer testing
-- It requires clear testing standards across squads to avoid chaos
-- It's not a cure all, it's a framework that needs adaptation
+- It thrives with clear testing standards shared across squads
+- It's a flexible framework you can adapt to your organization
 
-The teams that win aren't the ones expecting it to fix everything. They adapt it to their constraints, invest in the right infrastructure, and make intentional trade-offs.
+The teams that succeed treat it as a starting point. They adapt it to their organization, invest in the right infrastructure, and make intentional trade-offs.
 
 The model works. The key is implementing it thoughtfully for your specific reality.
