@@ -9,7 +9,8 @@ const description = "Places I've visited";
 <MainGridLayout title={title} description={description}>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
         <div class="card-base z-10 px-9 py-6 relative w-full ">
-            <h1 class="text-2xl font-bold mb-4 text-[var(--primary)]">My Map</h1>
+            <h1 class="text-2xl font-bold mb-1 text-[var(--primary)]">Where I've Been</h1>
+            <p class="text-75 mb-5">From growing up in central Illinois to settling in the Research Triangle, here's every place I've lived, studied, worked, and explored.</p>
             <TravelMap client:only="svelte" />
         </div>
     </div>
