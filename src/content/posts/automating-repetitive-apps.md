@@ -1,6 +1,6 @@
 ---
 title: "Design Patterns for 100% Critical Coverage"
-description: "Page object model with intent-based actions"
+description: "The page object and test data patterns that kept a large Playwright suite of insurance eApp flows easy to maintain"
 published: 2025-09-29
 updated: 2025-09-29
 tags: [Test Automation, Page Object Model, Playwright]
@@ -8,25 +8,17 @@ category: 'Test Automation'
 draft: false 
 ---
 
-After a focused effort, we lifted automated coverage of our critical capabilities from 15% to 100%, without the suite becoming a maintenance burden.
+After a focused push, we took automated coverage of our critical capabilities from 15% to 100%, and the suite is still easy to maintain.
 
-When QA teams aren't the ones designing the test cases, they're often asked to automate long, repetitive end-to-end flows. For example, hundreds of regression test cases that fill out insurance eApplications. These flows usually start life as manual test cases, so designing them well for automation makes a big difference.
+When QA teams aren't the ones designing the test cases, they're often asked to automate long, repetitive end-to-end flows, like hundreds of regression cases that fill out insurance eApplications. Those flows usually start life as manual test cases, so how you design them for automation makes a big difference.
 
-I've automated regression suites for internal eApp platforms, contributed to existing eApp frameworks, and built frameworks for several third-party eApp vendors.
+I've built and worked on suites like this for several eApp platforms, internal and third-party, and these are the patterns I've landed on.
 
-From working in other frameworks, building my own, and designing them with others, I've landed on an opinionated set of patterns that keep these large E2E suites resilient to change.
+## Name methods after what the user wants to do
 
-These patterns have worked really well for me and have made maintaining these suites much easier.
+The most important thing I've found for maintainable page objects is naming public methods after what the user is trying to do. The page object keeps the details of how the UI does it.
 
-### Page Object Model with Intent-Based Actions
-
-One thing I've realized is key to maintainable page objects is focusing on business actions rather than UI implementations. Public methods should describe what the user wants to achieve, and leave the UI details inside the page object.
-
-So many times a function will be very specific to the implementation, and has to be changed in nearly every single spec file in order to be accurate to the actions being completed.
-
-#### Why use intent-based names for public methods?
-
-Instead of exposing UI mechanics like `clickSubmit()` or `fillFirstName()`, create methods that represent complete actions or logical units of information. This makes tests more resilient to UI changes and keeps them focused on business scenarios.
+Methods like `clickSubmit()` or `fillFirstName()` mirror the UI, so when the UI changes, nearly every spec file changes with it. A method like `fillOwnerInformation()` describes a whole step:
 
 :::caution[Before]
 UI-mechanics focused
@@ -48,11 +40,11 @@ await page.fillOwnerInformation({
 });
 ```
 
-Tests become more descriptive, focusing on what should happen rather than how it happens. When UI changes occur, the tests remain stable because they're detached from specific UI implementations. Even complete form restructuring such as adding/removing fields shouldn't change what functions need to be called in your tests.
+Now the test reads like the business scenario. Even a big change to the form, like adding or removing fields, shouldn't change which methods your tests call.
 
-#### Strong typing and encapsulation
+## Keep the UI details private
 
-Playwright example:
+Here's what that looks like in a Playwright page object. The locators and field setters are private, and the public methods describe business actions:
 
 ```ts
 // Page object extends the base class
@@ -101,9 +93,9 @@ export class ApplicationPage extends PageComponent {
 }
 ```
 
-### High-level fill methods accept partial data
+## Accept partial data
 
-Accepting partial payloads lets tests pass only the fields relevant to a scenario and reduces churn when forms evolve.
+Fill methods take partial payloads, so each test passes only the fields its scenario cares about, and the form can change without touching every test:
 
 ```ts
 async fillOwnerInformation(payload: {
@@ -118,16 +110,12 @@ async fillOwnerInformation(payload: {
 ```
 
 :::tip
-Keep all selectors within page objects, treating them as the single source of truth for UI interactions. When elements move or change, updates only need to happen in one place.
+Keep every selector inside a page object. When an element moves, you change it in one place.
 :::
 
-### Centralized Data Factories and Fixtures
+## Put test data in factories and fixtures
 
-Another crucial pattern is centralizing test data generation in factories and fixtures. This ensures that when data requirements change (e.g., new validation rules), you only need to update one place instead of hundreds of tests.
-
-Auth data is a great example. When credentials (email, ID, username, password) live in a factory, a change to password requirements becomes a one-line update instead of a change across hundreds of spec files.
-
-The payoff grows with every validation rule change: you update the factory once, and every test picks it up automatically.
+The other pattern I rely on is building test data in factories and fixtures, so a new validation rule means one change in one place. If credentials live in a factory, for example, a new password requirement is a one-line fix.
 
 ```ts
 // fixtures/data-factories.ts
@@ -168,7 +156,7 @@ export const test = base.extend<DataFactories>({
 });
 ```
 
-Then your tests stay clean and use the fixture data:
+Tests then use the fixture, and override only what they need:
 
 ```ts
 test('can submit owner application', async ({ page, owner }) => {
@@ -187,8 +175,4 @@ test('handles missing contact info', async ({ page, owner }) => {
 });
 ```
 
-Data factories provide a single source of truth for test data, letting you build complex objects from smaller factories while maintaining type safety. This keeps tests focused on behavior and keeps your data easy to update in one place.
-
-## Closing
-
-The best test strategies balance every layer of the pyramid (I wrote more about that in [Getting the Most Value From Your E2E Tests](/posts/stop-writing-e2e/)). When the business needs broad E2E coverage, intent-based page objects, partial-data methods, and centralized data factories make even large suites easy to maintain.
+If you're weighing how much belongs at the E2E level in the first place, I wrote about that in [Getting the Most Value From Your E2E Tests](/posts/stop-writing-e2e/).

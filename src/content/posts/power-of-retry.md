@@ -1,6 +1,6 @@
 ---
 title: "Handling Hydration in Playwright Reliably"
-description: "A simple, fast pattern for testing server-rendered apps with confidence"
+description: "Retrying an action until the page responds, with expect().toPass(), instead of guessing when a server-rendered app is ready"
 published: 2026-02-16
 updated: 2026-02-16
 tags: [Testing Strategy, Playwright, Engineering Efficiency]
@@ -8,28 +8,22 @@ category: "Engineering"
 draft: false
 ---
 
-Handling hydration well is one of the biggest reliability wins you can get in a Playwright suite.
+Server-rendered apps send HTML that looks ready before the JavaScript has attached its event handlers. For a few hundred milliseconds, a button can be visible and enabled and still not respond when you click it. If a test clicks during that window, nothing happens, and the test fails for a reason that has nothing to do with the feature.
 
-If you haven't run into it: server-rendered apps send HTML that *looks* ready before the JavaScript has attached event handlers. For a few hundred milliseconds, a button can be visible and enabled but not respond yet. A test that clicks during that window needs a way to handle it.
+## What people usually try
 
----
-
-## Common Approaches
-
-Teams usually reach for one of a few approaches first. Each one is a reasonable starting point, and each points toward a better solution.
-
-### Fixed Waits
+The first fix most people reach for is a fixed wait:
 
 ```javascript
 await page.waitForTimeout(2000);
 await page.click('#submit');
 ```
 
-Simple and easy to read. The trade-off is that it's tied to a guess: if hydration takes 50ms, the test waits the full 2,000ms anyway, and if it ever takes longer than 2,000ms, the wait isn't enough.
+It's easy to read, but it's a guess. If hydration takes 50ms, the test still waits the full two seconds, and if it ever takes longer than two seconds, the wait isn't enough.
 
----
+Waiting for a `data-hydrated` flag works well when the app has one, but then the test depends on framework internals, and someone has to add and maintain the flag. Checking that the button is visible first doesn't add much either, because Playwright's actionability checks already wait for that before every click.
 
-### Clicking Multiple Times
+Clicking a few times in a row looks silly, but it's the closest of the lot, because it's what a person does when a button doesn't respond:
 
 ```javascript
 await page.click('#submit');
@@ -37,49 +31,11 @@ await page.click('#submit');
 await page.click('#submit');
 ```
 
-This is on the right track, because it mirrors what a user does. It just needs structure: a way to know when to stop, so the action only happens as many times as it needs to.
+It just needs a way to know when to stop.
 
----
+## Retrying with toPass
 
-### Hydration Flags
-
-```javascript
-await page.waitForSelector('[data-hydrated="true"]');
-await page.click('#submit');
-```
-
-This works well when the app exposes a flag. The trade-off is that the test now depends on framework internals, and the flag has to be added and maintained in the app.
-
----
-
-### Visibility Checks
-
-```javascript
-await expect(page.getByRole('button', { name: 'Submit' })).toBeVisible();
-await page.click('#submit');
-```
-
-A good instinct, and Playwright's actionability checks already do this for you automatically before every click. Hydration is about *interactivity*, so the most reliable signal is the result of the interaction itself.
-
----
-
-## What Humans Do
-
-How does a human handle this?
-
-If you click "Sign in" and nothing happens, you click it again.
-
-No timers.  
-No DOM polling.  
-No inspecting hidden attributes.
-
-They perform the action until the expected result happens. That's the behavior worth mimicking.
-
----
-
-## Retrying Around Intent
-
-This is exactly what `expect().toPass()` is designed for: structured, scoped retries around an action and its expected outcome.
+`expect().toPass()` does exactly that. It retries a block of actions and assertions until the assertions pass:
 
 ```javascript
 await expect(async () => {
@@ -88,60 +44,12 @@ await expect(async () => {
 }, { message: 'Submit the application' }).toPass({ timeout: 10000 });
 ```
 
-If the click lands before hydration finishes, the block retries.  
-As soon as the UI responds, it moves on immediately.
+If the click lands before hydration finishes, the block tries again, and as soon as the page responds, the test moves on. If hydration takes 20ms, the test waits 20ms. It also doesn't need to know which framework rendered the page or whether a hydration flag exists.
 
-It also reads nicely in the trace view, since the retries are grouped under one named step.
+Give the inner assertion a short timeout (one second here) so each attempt fails fast, and give `toPass` its own timeout so the whole block has an upper limit. In the trace viewer, the retries show up grouped under the step name you pass in `message`, which makes failures easy to read.
 
-A couple of details make this work best:
+## Only retry what's safe to repeat
 
-- **Give the inner assertion a short timeout**, so each attempt retries quickly instead of waiting the full default expect timeout (5s).
-- **Give `toPass` an explicit timeout**, so it has a clear upper bound.
+This works best for actions you can safely do more than once, like clicking Next, opening a menu or switching tabs.
 
-### Best Fit: Repeatable Actions
-
-This pattern is a perfect fit for actions that are safe to repeat, like clicking "Next," opening a menu, or switching tabs.
-
-For actions with side effects, like submitting a payment or creating a record, use the same idea one step earlier: retry a harmless interaction on the page until it responds (proving it's hydrated), then perform the important action once.
-
----
-
-## Why This Works
-
-Hydration timing is a race condition, and the most reliable way to handle a race condition is to design around eventual success.
-
-### 1. Efficiency
-
-The test runs as fast as the application allows. If hydration takes 20ms, the test moves on in 20ms.
-
-### 2. Resilience
-
-Instead of predicting *when* the button will be ready, you perform the action until the expected outcome occurs.
-
-### 3. Decoupling
-
-Your test is free to focus on behavior, independent of:
-
-- Which framework is rendering
-- What hydration flags exist
-- Whether React, Vue, or some custom system is bootstrapping
-
-It only cares that:
-
-> When a user clicks submit, they see the success message.
-
-That's the contract.
-
----
-
-## The Payoff
-
-Consistent results are what make an end-to-end suite valuable. When every pass and every failure is meaningful, the team spends its time on real issues and trusts the pipeline completely.
-
-Across a whole suite, especially on CI containers of varying speed, handling hydration this way adds up to a noticeably faster and more dependable test run.
-
----
-
-## Summary
-
-`expect().toPass()` lets you wait for the outcome instead of predicting when the app is ready. Use it for repeatable actions, give it sensible timeouts, and hydration becomes one less thing to think about.
+For anything with side effects, like submitting a payment or creating a record, use the same idea one step earlier. Retry something harmless on the page until it responds, which proves the page is hydrated, and then do the important action once.
