@@ -8,44 +8,30 @@ category: 'Quality Assurance'
 draft: false
 ---
 
-On September 30th, I attended TestingMind's [Software Quality Summit](https://www.testingmind.com/event/software-quality-summit-raleigh/) in Cary, right here in the Research Triangle. Two of my coworkers and I went together, thanks to Aspida for sending us. It was a great day, and it was nice to meet so many people working on quality engineering in the area.
+On September 30th, two of my coworkers and I went to TestingMind's [Software Quality Summit](https://www.testingmind.com/event/software-quality-summit-raleigh/) in Cary, right here in the Research Triangle. Thanks to Aspida for sending us. It was nice to meet so many people working on quality engineering so close to home.
 
-## AI Was the Main Theme
+## AI was the main theme
 
-Most of the day was about AI, from testing AI-powered products to using AI in the testing process itself. The panel on AI agents in testing (co-pilot, colleague, or replacement?) was a fun discussion.
+Most of the day was about AI, from testing AI-powered products to using AI in testing (one panel asked whether AI agents are a tester's co-pilot, colleague or replacement).
 
-The topic I found most interesting was **evals**. When a feature is powered by an LLM, a traditional pass/fail assertion doesn't fit very well, because the same input can produce many different valid outputs. Evals give you a structured way to measure whether those outputs are good enough, and they feel like a natural next step for QA engineers. Building eval datasets, defining scoring criteria, and tracking quality over time are all things testers are already good at.
+The topic I found most interesting was evals. When an LLM powers a feature, a pass/fail assertion doesn't fit well, because the same input can produce lots of valid outputs. Evals measure whether those outputs are good enough, and they feel like a natural next step for QA engineers. Building datasets, defining scoring criteria and tracking quality over time are things testers already do well.
 
-## Accessibility Testing in CI
+## Accessibility testing in CI
 
-My favorite talk was Vladimir Volkov's session on accessibility testing and WCAG compliance automation.
+My favorite talk was Vladimir Volkov's on automating accessibility testing and WCAG compliance. His setup used Storybook to test components in isolation and Playwright with axe to scan full pages and user flows, with both running in CI so accessibility issues show up in the pull request.
 
-The setup was:
+It reminded me a lot of the accessibility pipeline we built on a previous project. His was more mature, and I came away with plenty of ideas for taking ours further. I especially like testing at the component level. If your buttons, modals and forms pass in Storybook, every page built from them starts with accessible pieces.
 
-- **Storybook** for testing individual components in isolation
-- **Playwright with axe** for scanning full pages and user flows
-- Both running in **CI**, so accessibility issues show up in the pull request
+He also covered the WCAG conformance levels (AA is the one most regulations point to) and where legal liability comes in, which is a useful way to pitch accessibility to stakeholders. It's the right thing for users, and it's also a business risk, so it's much easier to prioritize.
 
-This reminded me a lot of the accessibility pipeline we built on a previous project. Theirs was more mature, and it gave me a lot of ideas for how to take that approach further. Testing at the component level is especially appealing. If your button, modal, and form components are accessible in Storybook, every page built from them starts from a strong foundation.
+Axe can't check everything, like reading order or whether alt text makes sense, but in CI it catches the common issues on every pull request.
 
-The part that impressed me most was his walkthrough of the **WCAG conformance levels**:
+## Spec-driven development
 
-- **Level A**: The baseline requirements, like text alternatives for images and full keyboard access.
-- **Level AA**: The level most organizations target, and the one most often referenced in regulations and legal standards. It adds things like color contrast requirements and consistent navigation.
-- **Level AAA**: The highest level. It's great to aim for where possible, but it isn't usually expected across an entire site.
+The other talk I really enjoyed was by Andrew Knight, also known as [Automation Panda](https://automationpanda.com/). I've been reading his blog for years and had no idea he was based in the Triangle, so it was great to see him speak in person.
 
-He also briefly covered where legal liability comes in when products aren't accessible. That's a really useful way to frame accessibility for stakeholders. It's the right thing to do for users, and it's also a real business risk to manage, which makes it much easier to prioritize.
+He talked about agent orchestration and spec-driven development. As AI agents take on more of the implementation, the spec becomes the most important artifact. It drives the agents, and it also defines what "correct" looks like for testing.
 
-Automated tools like axe won't catch everything (things like logical reading order and meaningful alt text still need a human), but running them in CI catches a large share of common issues early and makes accessibility a normal part of the development process.
+I wrote something similar earlier this year in [Most Software Engineers Are Becoming SDETs](/posts/swe-to-sdet/): as writing code gets faster, defining and checking behavior becomes the center of the work. Spec-driven development takes that idea a step further.
 
-## Agent Orchestration and Spec-Driven Development
-
-The other talk I really enjoyed was by Andrew Knight, also known as [Automation Panda](https://automationpanda.com/). I've been reading his blog for years, and I had no idea he was based in the Triangle, so it was great to see him speak in person.
-
-His talk was about agent orchestration and the future of spec-driven development in AI product workflows. The idea is that as AI agents take on more of the implementation work, the specification becomes the most important artifact. Clear, well-structured specs drive the agents, and they also define what "correct" looks like for testing.
-
-I thought it was a really interesting thought experiment. It connects to something I wrote about earlier this year in [Most Software Engineers Are Becoming SDETs](/posts/swe-to-sdet/): as writing code gets faster, defining and verifying behavior becomes the center of the work. Spec-driven development takes that idea one step further.
-
-## Wrapping Up
-
-I came home with a lot of new ideas, especially around maturing accessibility testing and getting more hands-on with evals. Thanks again to Aspida for supporting our professional development, and to TestingMind for putting on a great event. I'm looking forward to the next one.
+I came home with a lot of ideas, mostly about our accessibility testing and getting hands-on with evals. Thanks to TestingMind for putting it on.
